@@ -1,0 +1,37 @@
+* Bokbase
+
+This is a webapp that implements a simple book database intended to create goodreads-compatible csv files for use in [[https://bookwyrm.social/import][imports to bookwyrm]].
+
+Data storage is in a PostgreSQL database and there is a simple react.js GUI to edit books, import calibre metadata, and export [[https://zief0002.github.io/epsy-8251/codebooks/goodreads.html][goodreads style CSV files]].
+
+To give users access to the database, add the [[https://shiro.apache.org/authorization.html#Authorization-Roles][shiro role]] bokbaseuser to the user in [[https://github.com/steinarb/authservice][authservice]].
+
+** Development status
+[[https://travis-ci.org/steinarb/sampleapp][file:https://travis-ci.org/steinarb/bokbase.svg?branch=master]]
+
+** Installing the bokbase application
+
+Give the following commands to the karaf console:
+#+BEGIN_EXAMPLE
+  feature:repo-add mvn:no.priv.bang.bokbase/karaf/LATEST/xml/features
+  feature:install bokbase-with-derby
+#+END_EXAMPLE
+** Configuring a new default locale
+
+Out of the box, the sample application supports two locales: nb_NO (Norwegian bokmål) and en_GB (UK English).
+
+The locale texts are provided by a Java resource bundle, and new languages can be added by adding them to the bundle and to the available locales returned by the BokbaseService.
+
+The default locale is nb_NO.
+
+It is possible to persistently configuring the default locale to en_GB with the following commands in the karaf console command line:
+#+begin_example
+  config:edit no.priv.bang.bokbase.backend.BokbaseServiceProvider
+  config:property-set defaultlocale en_GB
+  config:update
+#+end_example
+
+/Note/! The name of the config file will change when the package name and classname of the class changes in a new application based on this one, so adjust the command example accordingly.
+** License
+
+This software is licensed with the Apache License v2.  See the file LICENSE for details.
