@@ -16,6 +16,7 @@
 package no.priv.bang.bokbase.db.liquibase.test;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -43,6 +44,7 @@ class BokbaseTestDbLiquibaseRunnerTest {
         runner.activate();
         runner.prepare(datasource);
         assertAccounts(datasource);
+        assertBooks(datasource);
     }
 
     private void assertAccounts(DataSource datasource) throws Exception {
@@ -56,7 +58,22 @@ class BokbaseTestDbLiquibaseRunnerTest {
                 }
             }
         }
-        assertEquals(0, resultcount);
+        assertNotEquals(0, resultcount);
+        assertThat(resultcount).isPositive();
+    }
+
+    private void assertBooks(DataSource datasource) throws Exception {
+        int resultcount = 0;
+        try (Connection connection = datasource.getConnection()) {
+            try(PreparedStatement statement = connection.prepareStatement("select * from books")) {
+                try (ResultSet results = statement.executeQuery()) {
+                    while (results.next()) {
+                        ++resultcount;
+                    }
+                }
+            }
+        }
+        assertThat(resultcount).isPositive();
     }
 
 }

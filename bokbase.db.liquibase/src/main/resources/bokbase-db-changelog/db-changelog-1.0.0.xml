@@ -39,4 +39,166 @@
 
     </changeSet>
 
+    <changeSet author="sb" id="bokbase-1.0.0-authors">
+        <preConditions onFail="CONTINUE" >
+            <not>
+                <tableExists tableName="authors" />
+            </not>
+        </preConditions>
+
+        <createTable tableName="authors">
+            <column autoIncrement="true" name="author_id" type="INTEGER">
+                <constraints primaryKey="true" primaryKeyName="authors_primary_key"/>
+            </column>
+            <column name="author_firstname" type="VARCHAR(64)"/>
+            <column name="author_lastname" type="VARCHAR(64)"/>
+        </createTable>
+
+        <createIndex indexName="authors_id_index" tableName="authors">
+            <column name="author_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="sb" id="bokbase-1.0.0-publishers">
+        <preConditions onFail="CONTINUE" >
+            <not>
+                <tableExists tableName="publishers" />
+            </not>
+        </preConditions>
+
+        <createTable tableName="publishers">
+            <column autoIncrement="true" name="publisher_id" type="INTEGER">
+                <constraints primaryKey="true" primaryKeyName="publishers_primary_key"/>
+            </column>
+            <column name="publisher_name" type="VARCHAR(64)"/>
+        </createTable>
+
+        <createIndex indexName="publishers_id_index" tableName="publishers">
+            <column name="publisher_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="sb" id="bokbase-1.0.0-series">
+        <preConditions onFail="CONTINUE" >
+            <not>
+                <tableExists tableName="series" />
+            </not>
+        </preConditions>
+
+        <createTable tableName="series">
+            <column autoIncrement="true" name="series_id" type="INTEGER">
+                <constraints primaryKey="true" primaryKeyName="series_primary_key"/>
+            </column>
+            <column name="series_name" type="VARCHAR(64)"/>
+        </createTable>
+
+        <createIndex indexName="series_id_index" tableName="series">
+            <column name="series_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="sb" id="bokbase-1.0.0-books">
+        <preConditions onFail="CONTINUE" >
+            <not>
+                <tableExists tableName="books" />
+            </not>
+        </preConditions>
+
+        <createTable tableName="books">
+            <column autoIncrement="true" name="book_id" type="INTEGER">
+                <constraints primaryKey="true" primaryKeyName="books_primary_key"/>
+            </column>
+            <column name="book_title" type="VARCHAR(128)"/>
+            <column name="book_subtitle" type="VARCHAR(128)"/>
+            <column name="series_id" type="INT" >
+                <constraints nullable="true" foreignKeyName="fk_books_seriesid" references="series(series_id)"/>
+            </column>
+            <column name="series_number" type="DOUBLE" />
+            <column name="author_id" type="INT">
+                <constraints nullable="true" foreignKeyName="fk_books_authorid" references="authors(author_id)"/>
+            </column>
+            <column name="average_rating" type="INT" />
+            <column name="publisher_id" type="INT">
+                <constraints nullable="true" foreignKeyName="fk_books_publisherid" references="publishers(publisher_id)"/>
+            </column>
+            <column name="binding" type="VARCHAR(20)" />
+            <column name="pages" type="INT" />
+            <column name="year_published" type="INT" />
+        </createTable>
+
+        <createIndex indexName="books_id_index" tableName="books">
+            <column name="book_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="sb" id="bokbase-1.0.0-bookshelves">
+        <preConditions onFail="CONTINUE" >
+            <not>
+                <tableExists tableName="bookshelves" />
+            </not>
+        </preConditions>
+
+        <createTable tableName="bookshelves">
+            <column autoIncrement="true" name="bookshelf_id" type="INTEGER">
+                <constraints primaryKey="true" primaryKeyName="bookshelves_primary_key"/>
+            </column>
+            <column name="account_id" type="INT">
+                <constraints nullable="true" foreignKeyName="fk_bookshelves_accountid" references="bokbase_accounts(account_id)"/>
+            </column>
+            <column name="bookshelf" type="VARCHAR(20)"/>
+            <column name="book_id" type="INT">
+                <constraints nullable="true" foreignKeyName="fk_bookshelves_bookid" references="books(book_id)"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="bookshelves_id_index" tableName="bookshelves">
+            <column name="bookshelf_id"/>
+        </createIndex>
+
+        <createIndex indexName="bookshelf_account_id_index" tableName="bookshelves">
+            <column name="account_id"/>
+        </createIndex>
+
+        <createIndex indexName="bookshelf_bookshelf_index" tableName="bookshelves">
+            <column name="bookshelf"/>
+        </createIndex>
+
+        <createIndex indexName="bookshelf_book_id_index" tableName="bookshelves">
+            <column name="book_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="sb" id="bokbase-1.0.0-book_ratings">
+        <preConditions onFail="CONTINUE" >
+            <not>
+                <tableExists tableName="book_ratings" />
+            </not>
+        </preConditions>
+
+        <createTable tableName="book_ratings">
+            <column autoIncrement="true" name="book_rating_id" type="INTEGER">
+                <constraints primaryKey="true" primaryKeyName="book_ratings_primary_key"/>
+            </column>
+            <column name="account_id" type="INT">
+                <constraints nullable="true" foreignKeyName="fk_book_ratings_accountid" references="bokbase_accounts(account_id)"/>
+            </column>
+            <column name="book_id" type="INT">
+                <constraints nullable="true" foreignKeyName="fk_book_ratings_bookid" references="books(book_id)"/>
+            </column>
+            <column name="rating" type="INT" />
+        </createTable>
+
+        <createIndex indexName="book_ratings_id_index" tableName="book_ratings">
+            <column name="book_rating_id"/>
+        </createIndex>
+
+        <createIndex indexName="book_rating_account_id_index" tableName="book_ratings">
+            <column name="account_id"/>
+        </createIndex>
+
+        <createIndex indexName="book_rating_book_id_index" tableName="book_ratings">
+            <column name="book_id"/>
+        </createIndex>
+    </changeSet>
+
 </databaseChangeLog>

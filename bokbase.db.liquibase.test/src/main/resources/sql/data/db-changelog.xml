@@ -14,4 +14,12 @@
     <!-- See the License for the specific language governing permissions and limitations -->
     <!-- under the License.                                                              -->
 
+    <include file="sql/data/bokbase_accounts.sql"/>
+    <include file="sql/data/authors.sql"/>
+    <include file="sql/data/series.sql"/>
+    <include file="sql/data/publishers.sql"/>
+    <include file="sql/data/books.sql"/>
+    <include file="sql/data/bookshelves.sql"/>
+    <include file="sql/data/book_ratings.sql"/>
+
 </databaseChangeLog>
