@@ -19,6 +19,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import no.priv.bang.bokbase.services.beans.Account;
+import no.priv.bang.bokbase.services.beans.LocaleBean;
+
 public interface BokbaseService {
 
     public List<Account> getAccounts();

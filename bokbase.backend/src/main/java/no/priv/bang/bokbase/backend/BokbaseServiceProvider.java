@@ -40,9 +40,9 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.log.LogService;
 import org.osgi.service.log.Logger;
 
-import no.priv.bang.bokbase.services.Account;
-import no.priv.bang.bokbase.services.LocaleBean;
 import no.priv.bang.bokbase.services.BokbaseService;
+import no.priv.bang.bokbase.services.beans.Account;
+import no.priv.bang.bokbase.services.beans.LocaleBean;
 import no.priv.bang.osgiservice.users.Role;
 import no.priv.bang.osgiservice.users.User;
 import no.priv.bang.osgiservice.users.UserManagementService;

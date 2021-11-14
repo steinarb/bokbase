@@ -28,9 +28,9 @@ import org.junit.jupiter.api.Test;
 
 import com.mockrunner.mock.web.MockHttpServletRequest;
 
-import no.priv.bang.bokbase.services.Credentials;
-import no.priv.bang.bokbase.services.Loginresult;
 import no.priv.bang.bokbase.services.BokbaseService;
+import no.priv.bang.bokbase.services.beans.Credentials;
+import no.priv.bang.bokbase.services.beans.Loginresult;
 import no.priv.bang.bokbase.web.api.ShiroTestBase;
 import no.priv.bang.osgi.service.mocks.logservice.MockLogService;
 

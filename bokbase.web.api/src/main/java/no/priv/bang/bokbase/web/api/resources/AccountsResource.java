@@ -23,8 +23,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import no.priv.bang.bokbase.services.Account;
 import no.priv.bang.bokbase.services.BokbaseService;
+import no.priv.bang.bokbase.services.beans.Account;
 
 @Path("")
 @Produces(MediaType.APPLICATION_JSON)

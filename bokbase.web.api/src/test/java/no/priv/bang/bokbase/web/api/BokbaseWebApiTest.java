@@ -47,10 +47,10 @@ import com.mockrunner.mock.web.MockHttpServletResponse;
 import com.mockrunner.mock.web.MockHttpSession;
 import com.mockrunner.mock.web.MockServletOutputStream;
 
-import no.priv.bang.bokbase.services.Account;
-import no.priv.bang.bokbase.services.Credentials;
-import no.priv.bang.bokbase.services.LocaleBean;
 import no.priv.bang.bokbase.services.BokbaseService;
+import no.priv.bang.bokbase.services.beans.Account;
+import no.priv.bang.bokbase.services.beans.Credentials;
+import no.priv.bang.bokbase.services.beans.LocaleBean;
 import no.priv.bang.bokbase.web.api.resources.ErrorMessage;
 import no.priv.bang.osgi.service.mocks.logservice.MockLogService;
 

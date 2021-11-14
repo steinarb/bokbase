@@ -41,9 +41,9 @@ import org.apache.shiro.web.util.WebUtils;
 import org.osgi.service.log.LogService;
 import org.osgi.service.log.Logger;
 
-import no.priv.bang.bokbase.services.Credentials;
-import no.priv.bang.bokbase.services.Loginresult;
 import no.priv.bang.bokbase.services.BokbaseService;
+import no.priv.bang.bokbase.services.beans.Credentials;
+import no.priv.bang.bokbase.services.beans.Loginresult;
 
 @Path("")
 @Consumes(MediaType.APPLICATION_JSON)

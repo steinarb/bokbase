@@ -32,8 +32,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
 import no.priv.bang.osgi.service.mocks.logservice.MockLogService;
-import no.priv.bang.bokbase.services.LocaleBean;
 import no.priv.bang.bokbase.services.BokbaseService;
+import no.priv.bang.bokbase.services.beans.LocaleBean;
 
 class LocalizationResourceTest {
     private final static Locale NB_NO = Locale.forLanguageTag("nb-no");

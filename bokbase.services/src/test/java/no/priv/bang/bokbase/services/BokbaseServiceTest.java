@@ -25,6 +25,9 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
+import no.priv.bang.bokbase.services.beans.Account;
+import no.priv.bang.bokbase.services.beans.LocaleBean;
+
 
 class BokbaseServiceTest {
 

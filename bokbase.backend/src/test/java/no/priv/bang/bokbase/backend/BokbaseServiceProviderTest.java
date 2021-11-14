@@ -34,8 +34,8 @@ import org.ops4j.pax.jdbc.derby.impl.DerbyDataSourceFactory;
 import org.osgi.service.jdbc.DataSourceFactory;
 
 import no.priv.bang.bokbase.db.liquibase.test.BokbaseTestDbLiquibaseRunner;
-import no.priv.bang.bokbase.services.Account;
-import no.priv.bang.bokbase.services.LocaleBean;
+import no.priv.bang.bokbase.services.beans.Account;
+import no.priv.bang.bokbase.services.beans.LocaleBean;
 import no.priv.bang.osgi.service.mocks.logservice.MockLogService;
 import no.priv.bang.osgiservice.users.UserManagementService;
 
