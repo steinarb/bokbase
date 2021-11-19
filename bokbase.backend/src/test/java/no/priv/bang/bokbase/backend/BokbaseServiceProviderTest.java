@@ -99,46 +99,46 @@ class BokbaseServiceProviderTest {
 
     @Test
     void testDefaultLocale() {
-        BokbaseServiceProvider ukelonn = new BokbaseServiceProvider();
+        BokbaseServiceProvider bokbase = new BokbaseServiceProvider();
         UserManagementService useradmin = mock(UserManagementService.class);
-        ukelonn.setUseradmin(useradmin);
-        ukelonn.activate(Collections.singletonMap("defaultlocale", "nb_NO"));
-        assertEquals(NB_NO, ukelonn.defaultLocale());
+        bokbase.setUseradmin(useradmin);
+        bokbase.activate(Collections.singletonMap("defaultlocale", "nb_NO"));
+        assertEquals(NB_NO, bokbase.defaultLocale());
     }
 
     @Test
     void testAvailableLocales() {
-        BokbaseServiceProvider ukelonn = new BokbaseServiceProvider();
+        BokbaseServiceProvider bokbase = new BokbaseServiceProvider();
         UserManagementService useradmin = mock(UserManagementService.class);
-        ukelonn.setUseradmin(useradmin);
-        ukelonn.activate(Collections.singletonMap("defaultlocale", "nb_NO"));
-        List<LocaleBean> locales = ukelonn.availableLocales();
-        assertThat(locales).isNotEmpty().contains(LocaleBean.with().locale(ukelonn.defaultLocale()).build());
+        bokbase.setUseradmin(useradmin);
+        bokbase.activate(Collections.singletonMap("defaultlocale", "nb_NO"));
+        List<LocaleBean> locales = bokbase.availableLocales();
+        assertThat(locales).isNotEmpty().contains(LocaleBean.with().locale(bokbase.defaultLocale()).build());
     }
 
     @Test
     void testDisplayTextsForDefaultLocale() {
-        BokbaseServiceProvider ukelonn = new BokbaseServiceProvider();
+        BokbaseServiceProvider bokbase = new BokbaseServiceProvider();
         UserManagementService useradmin = mock(UserManagementService.class);
-        ukelonn.setUseradmin(useradmin);
-        ukelonn.activate(Collections.singletonMap("defaultlocale", "nb_NO"));
-        Map<String, String> displayTexts = ukelonn.displayTexts(ukelonn.defaultLocale());
+        bokbase.setUseradmin(useradmin);
+        bokbase.activate(Collections.singletonMap("defaultlocale", "nb_NO"));
+        Map<String, String> displayTexts = bokbase.displayTexts(bokbase.defaultLocale());
         assertThat(displayTexts).isNotEmpty();
     }
 
     @Test
     void testDisplayText() {
-        BokbaseServiceProvider ukelonn = new BokbaseServiceProvider();
+        BokbaseServiceProvider bokbase = new BokbaseServiceProvider();
         UserManagementService useradmin = mock(UserManagementService.class);
-        ukelonn.setUseradmin(useradmin);
-        ukelonn.activate(Collections.singletonMap("defaultlocale", "nb_NO"));
-        String text1 = ukelonn.displayText("hi", "nb_NO");
+        bokbase.setUseradmin(useradmin);
+        bokbase.activate(Collections.singletonMap("defaultlocale", "nb_NO"));
+        String text1 = bokbase.displayText("hi", "nb_NO");
         assertEquals("Hei", text1);
-        String text2 = ukelonn.displayText("hi", "en_GB");
+        String text2 = bokbase.displayText("hi", "en_GB");
         assertEquals("Hi", text2);
-        String text3 = ukelonn.displayText("hi", "");
+        String text3 = bokbase.displayText("hi", "");
         assertEquals("Hei", text3);
-        String text4 = ukelonn.displayText("hi", null);
+        String text4 = bokbase.displayText("hi", null);
         assertEquals("Hei", text4);
     }
 
