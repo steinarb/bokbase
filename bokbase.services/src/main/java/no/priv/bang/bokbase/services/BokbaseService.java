@@ -20,7 +20,15 @@ import java.util.Locale;
 import java.util.Map;
 
 import no.priv.bang.bokbase.services.beans.Account;
+import no.priv.bang.bokbase.services.beans.Author;
+import no.priv.bang.bokbase.services.beans.AuthorsWithAddedAuthorId;
+import no.priv.bang.bokbase.services.beans.Book;
+import no.priv.bang.bokbase.services.beans.BooksWithAddedBookId;
 import no.priv.bang.bokbase.services.beans.LocaleBean;
+import no.priv.bang.bokbase.services.beans.Publisher;
+import no.priv.bang.bokbase.services.beans.PublishersWithAddedPublisherId;
+import no.priv.bang.bokbase.services.beans.Series;
+import no.priv.bang.bokbase.services.beans.SeriesWithAddedSeriesId;
 
 public interface BokbaseService {
 
@@ -35,5 +43,37 @@ public interface BokbaseService {
     public String displayText(String key, String locale);
 
     public boolean lazilyCreateAccount(String username);
+
+    public List<Book> listBooks(String username);
+
+    public BooksWithAddedBookId addBook(String username, Book book);
+
+    public List<Book> updateBook(String username, Book book);
+
+    public List<Book> removeBook(String username, Book book);
+
+    public List<Author> listAuthors();
+
+    public AuthorsWithAddedAuthorId addAuthor(Author author);
+
+    public List<Author> updateAuthor(Author author);
+
+    public List<Author> removeAuthor(Author author);
+
+    public List<Publisher> listPublishers();
+
+    public PublishersWithAddedPublisherId addPublisher(Publisher publisher);
+
+    public List<Publisher> updatePublisher(Publisher publisher);
+
+    public List<Publisher> removePublisher(Publisher publisher);
+
+    public List<Series> listSeries();
+
+    public SeriesWithAddedSeriesId addSeries(Series newSeries);
+
+    public List<Series> updateSeries(Series updatedSeries);
+
+    public List<Series> removeSeries(Series seriesToRemove);
 
 }

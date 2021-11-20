@@ -157,7 +157,7 @@ class BokbaseLiquibaseTest {
     }
 
     private int addAuthor(Connection connection, String firstname, String lastname) throws Exception {
-        String sql = "insert into authors (firstname, lastname) values (?, ?)";
+        String sql = "insert into authors (author_firstname, author_lastname) values (?, ?)";
         try(PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, firstname);
             statement.setString(2, lastname);
@@ -168,7 +168,7 @@ class BokbaseLiquibaseTest {
     }
 
     private int findAuthorId(Connection connection, String firstname, String lastname) throws Exception {
-        String sql = "select author_id from authors where firstname=? and lastname=?";
+        String sql = "select author_id from authors where author_firstname=? and author_lastname=?";
         try(PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, firstname);
             statement.setString(2, lastname);

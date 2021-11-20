@@ -186,6 +186,8 @@
                 <constraints nullable="true" foreignKeyName="fk_book_ratings_bookid" references="books(book_id)"/>
             </column>
             <column name="rating" type="INT" />
+            <column name="month_read" type="INT" />
+            <column name="year_read" type="INT" />
         </createTable>
 
         <createIndex indexName="book_ratings_id_index" tableName="book_ratings">

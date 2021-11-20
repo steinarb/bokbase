@@ -26,7 +26,15 @@ import java.util.Map;
 import org.junit.jupiter.api.Test;
 
 import no.priv.bang.bokbase.services.beans.Account;
+import no.priv.bang.bokbase.services.beans.Author;
+import no.priv.bang.bokbase.services.beans.AuthorsWithAddedAuthorId;
+import no.priv.bang.bokbase.services.beans.Book;
+import no.priv.bang.bokbase.services.beans.BooksWithAddedBookId;
 import no.priv.bang.bokbase.services.beans.LocaleBean;
+import no.priv.bang.bokbase.services.beans.Publisher;
+import no.priv.bang.bokbase.services.beans.PublishersWithAddedPublisherId;
+import no.priv.bang.bokbase.services.beans.Series;
+import no.priv.bang.bokbase.services.beans.SeriesWithAddedSeriesId;
 
 
 class BokbaseServiceTest {
@@ -49,6 +57,44 @@ class BokbaseServiceTest {
         String key = "loggedout";
         String text = service.displayText(key, locale.toString());
         assertNull(text);
+        List<Book> books = service.listBooks(username);
+        assertThat(books).isEmpty();
+        Book book = Book.with().build();
+        BooksWithAddedBookId booksWithAddedBook = service.addBook(username, book);
+        assertNull(booksWithAddedBook);
+        List<Book> booksWithUpdatedBook = service.updateBook(username, book);
+        assertThat(booksWithUpdatedBook).isEmpty();
+        List<Book> booksWithDeletedBook = service.removeBook(username, book);
+        assertThat(booksWithDeletedBook).isEmpty();
+        List<Author> authors = service.listAuthors();
+        assertThat(authors).isEmpty();
+        Author author = Author.with().build();
+        AuthorsWithAddedAuthorId authorsWithAddedAuthorId = service.addAuthor(author);
+        assertNull(authorsWithAddedAuthorId);
+        List<Author> updatedAuthors = service.updateAuthor(author);
+        assertThat(updatedAuthors).isEmpty();
+        List<Author> authorsWithDeleted = service.removeAuthor(author);
+        assertThat(authorsWithDeleted).isEmpty();
+        List<Publisher> publishers = service.listPublishers();
+        assertThat(publishers).isEmpty();
+        Publisher publisher = Publisher.with().build();
+        PublishersWithAddedPublisherId publishersWithAddedPublisherId = service.addPublisher(publisher);
+        assertNull(publishersWithAddedPublisherId);
+        List<Publisher> updatedPublishers = service.updatePublisher(publisher);
+        assertThat(updatedPublishers).isEmpty();
+        List<Publisher> publishersWithRemoved = service.removePublisher(publisher);
+        assertThat(publishersWithRemoved).isEmpty();
+        List<Series> series = service.listSeries();
+        assertThat(series).isEmpty();
+        Series newSeries = Series.with().name("Expanse").build();
+        SeriesWithAddedSeriesId seriesWithAddedSeriesId = service.addSeries(newSeries);
+        assertNull(seriesWithAddedSeriesId);
+        Series updatedSeries = Series.with().name("Expanse").build();
+        List<Series> seriesWithUpdated = service.updateSeries(updatedSeries);
+        assertThat(seriesWithUpdated).isEmpty();
+        Series seriesToRemove = Series.with().name("Expanse").build();
+        List<Series> seriesWithoutRemoved = service.removeSeries(seriesToRemove);
+        assertThat(seriesWithoutRemoved).isEmpty();
     }
 
 }
