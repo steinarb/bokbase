@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import {
     LOGOUT_REQUEST,
 } from '../reduxactions';
-import { Container } from './bootstrap/Container';
+import Container from './bootstrap/Container';
 
 
 function Unauthorized(props) {
