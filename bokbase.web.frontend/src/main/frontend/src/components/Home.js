@@ -2,7 +2,7 @@ import React from 'react';
 import { Redirect } from 'react-router';
 import { connect } from 'react-redux';
 import { Container } from './bootstrap/Container';
-import { LOGOUT_REQUEST } from '../actiontypes';
+import { LOGOUT_REQUEST } from '../reduxactions';
 import Locale from './Locale';
 
 

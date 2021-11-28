@@ -3,7 +3,7 @@ import { Redirect } from 'react-router';
 import { connect } from 'react-redux';
 import {
     LOGOUT_REQUEST,
-} from '../actiontypes';
+} from '../reduxactions';
 import { Container } from './bootstrap/Container';
 
 

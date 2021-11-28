@@ -5,7 +5,7 @@ import {
     USERNAME_MODIFY,
     PASSWORD_MODIFY,
     LOGIN_REQUEST,
-} from '../actiontypes';
+} from '../reduxactions';
 import LoginMessage from './LoginMessage';
 
 function Login(props) {

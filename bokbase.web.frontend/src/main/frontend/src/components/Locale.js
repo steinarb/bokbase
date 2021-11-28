@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import {
     UPDATE_LOCALE,
-} from '../actiontypes';
+} from '../reduxactions';
 
 function Locale(props) {
     const { className, locale, availableLocales, onUpdateLocale } = props;
