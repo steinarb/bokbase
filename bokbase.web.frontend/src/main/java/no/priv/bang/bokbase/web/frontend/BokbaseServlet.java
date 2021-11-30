@@ -39,6 +39,14 @@ public class BokbaseServlet extends FrontendServlet {
         // The paths used by the react router
         setRoutes(
             "/",
+            "/books",
+            "/books/add",
+            "/authors",
+            "/authors/add",
+            "/publishers",
+            "/publishers/add",
+            "/series",
+            "/series/add",
             "/login",
             "/unauthorized");
     }

@@ -1,7 +1,7 @@
 import React from 'react';
-import { Redirect } from 'react-router';
 import { connect } from 'react-redux';
-import { Container } from './bootstrap/Container';
+import Container from './bootstrap/Container';
+import StyledLinkRight from './bootstrap/StyledLinkRight';
 import { LOGOUT_REQUEST } from '../reduxactions';
 import Locale from './Locale';
 
@@ -9,25 +9,20 @@ import Locale from './Locale';
 function Home(props) {
     const {
         text,
-        loginresultat,
-        accountCount,
         onLogout,
     } = props;
-    const username = loginresultat.username;
-    if (!loginresultat.authorized) {
-        return <Redirect to="/unauthorized" />;
-    }
 
     return (
         <div>
             <nav className="navbar navbar-light bg-light">
-                <a className="btn btn-primary left-align-cell" href="../.."><span className="oi oi-chevron-left" title="chevron left" aria-hidden="true"></span>&nbsp;{text.gohome}!</a>
-                <h1>Sampleapp</h1>
+                <h1>{text.theBookshelf}</h1>
                 <Locale />
             </nav>
             <Container>
-                <p>{text.hi} {username}!</p>
-                <p>{text.numberofaccounts}: {accountCount}</p>
+                <StyledLinkRight to="/books">{text.books}</StyledLinkRight>
+                <StyledLinkRight to="/authors">{text.authors}</StyledLinkRight>
+                <StyledLinkRight to="/publishers">{text.publishers}</StyledLinkRight>
+                <StyledLinkRight to="/series">{text.series_plural}</StyledLinkRight>
                 <p><button className="btn btn-primary" onClick={onLogout}>{text.logout}</button></p>
             </Container>
         </div>
@@ -35,13 +30,9 @@ function Home(props) {
 }
 
 function mapStateToProps(state) {
-    const { loginresultat } = state;
     const text = state.displayTexts;
-    const accountCount = state.accounts.length;
     return {
         text,
-        loginresultat,
-        accountCount,
     };
 }
 

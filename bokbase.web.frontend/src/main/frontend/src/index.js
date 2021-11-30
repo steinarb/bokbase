@@ -15,6 +15,9 @@ import {
     LOGINSTATE_REQUEST,
     DEFAULT_LOCALE_REQUEST,
     AVAILABLE_LOCALES_REQUEST,
+    AUTHORS_REQUEST,
+    PUBLISHERS_REQUEST,
+    SERIES_REQUEST,
 } from './reduxactions';
 
 const baseUrl = Array.from(document.scripts).map(s => s.src).filter(src => src.includes('bundle.js'))[0].replace('/bundle.js', '');
@@ -34,6 +37,9 @@ sagaMiddleware.run(rootSaga);
 store.dispatch(LOGINSTATE_REQUEST());
 store.dispatch(DEFAULT_LOCALE_REQUEST());
 store.dispatch(AVAILABLE_LOCALES_REQUEST());
+store.dispatch(AUTHORS_REQUEST());
+store.dispatch(PUBLISHERS_REQUEST());
+store.dispatch(SERIES_REQUEST());
 
 ReactDOM.render(
     <Provider store={store}>

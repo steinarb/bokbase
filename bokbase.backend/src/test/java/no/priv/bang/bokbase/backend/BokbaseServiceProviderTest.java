@@ -313,6 +313,7 @@ class BokbaseServiceProviderTest {
             .filter(b -> b.getBookId() == 1L)
             .findFirst()
             .orElse(null);
+        assertThat(updatedBook).usingRecursiveComparison().isNotEqualTo(originalBook);
         assertThat(updatedBook).usingRecursiveComparison().isEqualTo(modifiedBook);
         assertNotEquals(originalBook, updatedBook);
     }

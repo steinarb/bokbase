@@ -9,6 +9,13 @@ import availableLocalesSaga from './availableLocalesSaga';
 import displayTextsSaga from './displayTextsSaga';
 import locationSaga from './locationSaga';
 import accountsSaga from './accountsSaga';
+import bookSaga from './bookSaga';
+import booksSaga from './booksSaga';
+import authorSaga from './authorSaga';
+import authorsSaga from './authorsSaga';
+import publisherSaga from './publisherSaga';
+import publishersSaga from './publishersSaga';
+import seriesSaga from './seriesSaga';
 
 export default function* rootSaga() {
     yield all([
@@ -21,5 +28,12 @@ export default function* rootSaga() {
         fork(displayTextsSaga),
         fork(locationSaga),
         fork(accountsSaga),
+        fork(bookSaga),
+        fork(booksSaga),
+        fork(authorSaga),
+        fork(authorsSaga),
+        fork(publisherSaga),
+        fork(publishersSaga),
+        fork(seriesSaga),
     ]);
 }
