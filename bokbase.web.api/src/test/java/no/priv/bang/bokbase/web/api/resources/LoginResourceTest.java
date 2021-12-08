@@ -38,52 +38,59 @@ class LoginResourceTest extends ShiroTestBase {
 
     @Test
     void testLogin() {
+        MockHttpServletRequest request = new MockHttpServletRequest();
         BokbaseService bokbase = mock(BokbaseService.class);
         LoginResource resource = new LoginResource();
+        resource.request = request;
         resource.bokbase = bokbase;
         String username = "jd";
         String password = "johnnyBoi";
         createSubjectAndBindItToThread();
         Credentials credentials = Credentials.with().username(username).password(password).build();
         String locale = "nb_NO";
-        Loginresult resultat = resource.login(locale, credentials);
-        assertTrue(resultat.getSuksess());
-        assertTrue(resultat.isAuthorized());
-        assertNull(resultat.getOriginalRequestUrl());
+        Loginresult result = resource.login(locale, credentials);
+        assertTrue(result.getSuksess());
+        assertTrue(result.isAuthorized());
+        assertNull(result.getOriginalRequestUrl());
     }
 
     @Test
     void testLoginByUserWithoutRole() {
+        MockHttpServletRequest request = new MockHttpServletRequest();
         BokbaseService bokbase = mock(BokbaseService.class);
         LoginResource resource = new LoginResource();
+        resource.request = request;
         resource.bokbase = bokbase;
         String username = "jad";
         String password = "1ad";
         createSubjectAndBindItToThread();
         Credentials credentials = Credentials.with().username(username).password(password).build();
         String locale = "nb_NO";
-        Loginresult resultat = resource.login(locale, credentials);
-        assertTrue(resultat.getSuksess());
-        assertFalse(resultat.isAuthorized());
+        Loginresult result = resource.login(locale, credentials);
+        assertTrue(result.getSuksess());
+        assertFalse(result.isAuthorized());
     }
 
     @Test
     void testLoginWithOriginalRequestUrl() {
+        MockHttpServletRequest request = new MockHttpServletRequest()
+            .setContextPath("/bokbase");
         BokbaseService bokbase = mock(BokbaseService.class);
         LoginResource resource = new LoginResource();
+        resource.request = request;
         resource.bokbase = bokbase;
         String username = "jd";
         String password = "johnnyBoi";
         MockHttpServletRequest originalRequest = new MockHttpServletRequest();
-        originalRequest.setRequestURI("http://localhost:8181/bokbase");
+        originalRequest.setRequestURI("/bokbase/");
         createSubjectFromOriginalRequestAndBindItToThread(originalRequest);
         WebUtils.saveRequest(originalRequest);
         Credentials credentials = Credentials.with().username(username).password(password).build();
         String locale = "nb_NO";
-        Loginresult resultat = resource.login(locale, credentials);
-        assertTrue(resultat.getSuksess());
-        assertTrue(resultat.isAuthorized());
-        assertNotNull(resultat.getOriginalRequestUrl());
+        Loginresult result = resource.login(locale, credentials);
+        assertTrue(result.getSuksess());
+        assertTrue(result.isAuthorized());
+        assertEquals("/", result.getOriginalRequestUrl());
     }
 
     @Test
@@ -162,7 +169,7 @@ class LoginResourceTest extends ShiroTestBase {
     }
 
     @Test
-    void testGetLoginstateWhenLoggedInButUserDoesntHaveRoleSampleappuser() {
+    void testGetLoginstateWhenLoggedInButUserDoesntHaveRoleBokbaseuser() {
         String locale = "nb_NO";
         BokbaseService bokbase = mock(BokbaseService.class);
         when(bokbase.displayText(anyString(), anyString())).thenReturn("Bruker er logget inn men mangler tilgang");
