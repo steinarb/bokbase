@@ -49,6 +49,7 @@ import com.mockrunner.mock.web.MockHttpServletResponse;
 import com.mockrunner.mock.web.MockHttpSession;
 import com.mockrunner.mock.web.MockServletOutputStream;
 
+import no.priv.bang.bokbase.services.BokbaseException;
 import no.priv.bang.bokbase.services.BokbaseService;
 import no.priv.bang.bokbase.services.beans.Account;
 import no.priv.bang.bokbase.services.beans.Author;
@@ -245,6 +246,29 @@ class BokbaseWebApiTest extends ShiroTestBase {
         assertEquals("application/json", response.getContentType());
         List<Book> books = mapper.readValue(getBinaryContent(response), new TypeReference<List<Book>>() {});
         assertThat(books).isNotEmpty();
+    }
+
+    @Test
+    void testGetBooksWhenBackendThrowsException() throws Exception {
+        // Set up REST API servlet with mocked services
+        BokbaseService bokbase = mock(BokbaseService.class);
+        when(bokbase.listBooks(anyString())).thenThrow(BokbaseException.class);
+        MockLogService logservice = new MockLogService();
+    
+        BokbaseWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(bokbase , logservice);
+    
+        // Create the request and response
+        MockHttpServletRequest request = buildGetUrl("/books/jad");
+        MockHttpServletResponse response = new MockHttpServletResponse();
+    
+        // Run the method under test
+        servlet.service(request, response);
+    
+        // Check the response
+        assertEquals(500, response.getStatus());
+        assertEquals("application/json", response.getContentType());
+        no.priv.bang.bokbase.services.beans.ErrorMessage errorMessage = mapper.readValue(getBinaryContent(response), no.priv.bang.bokbase.services.beans.ErrorMessage.class);
+        assertThat(errorMessage.getMessage()).isNull();
     }
 
     @Test
