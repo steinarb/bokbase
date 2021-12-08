@@ -37,6 +37,7 @@ import org.ops4j.pax.jdbc.derby.impl.DerbyDataSourceFactory;
 import org.osgi.service.jdbc.DataSourceFactory;
 
 import no.priv.bang.bokbase.db.liquibase.test.BokbaseTestDbLiquibaseRunner;
+import no.priv.bang.bokbase.services.BokbaseException;
 import no.priv.bang.bokbase.services.beans.Account;
 import no.priv.bang.bokbase.services.beans.Author;
 import no.priv.bang.bokbase.services.beans.AuthorsWithAddedAuthorId;
@@ -224,9 +225,8 @@ class BokbaseServiceProviderTest {
         bokbase.setDatasource(datasourceWithFailure);
         bokbase.activate(Collections.singletonMap("defaultlocale", "nb_NO"));
         assertThat(logservice.getLogmessages()).isEmpty();
-        List<Book> books = bokbase.listBooks(username);
-        assertThat(logservice.getLogmessages()).isNotEmpty();
-        assertThat(books).isEmpty();
+        BokbaseException e = assertThrows(BokbaseException.class, () -> bokbase.listBooks(username));
+        assertThat(e.getMessage()).startsWith("Unable to list books for user jad");
     }
 
     @Test
@@ -278,10 +278,8 @@ class BokbaseServiceProviderTest {
         bokbase.activate(Collections.singletonMap("defaultlocale", "nb_NO"));
         Book newBook = Book.with().build();
         assertThat(logservice.getLogmessages()).isEmpty();
-        BooksWithAddedBookId booksAfterAdd = bokbase.addBook(username, newBook);
-        assertThat(logservice.getLogmessages()).isNotEmpty();
-        assertThat(booksAfterAdd.getBooks()).isEmpty();
-        assertNull(booksAfterAdd.getAddedBookId());
+        BokbaseException e = assertThrows(BokbaseException.class, () -> bokbase.addBook(username, newBook));
+        assertThat(e.getMessage()).startsWith("Unable to add book for user jad");
     }
 
     @Test
@@ -356,9 +354,8 @@ class BokbaseServiceProviderTest {
         bokbase.activate(Collections.singletonMap("defaultlocale", "nb_NO"));
         Book modifiedBook = Book.with().build();
         assertThat(logservice.getLogmessages()).isEmpty();
-        List<Book> updatedBooks = bokbase.updateBook(username, modifiedBook);
-        assertThat(logservice.getLogmessages()).isNotEmpty();
-        assertThat(updatedBooks).isEmpty();
+        BokbaseException e = assertThrows(BokbaseException.class, () -> bokbase.updateBook(username, modifiedBook));
+        assertThat(e.getMessage()).startsWith("Unable to modify book for user jad");
     }
 
     @Test
@@ -398,9 +395,8 @@ class BokbaseServiceProviderTest {
         bokbase.activate(Collections.singletonMap("defaultlocale", "nb_NO"));
         Book deleteCandidate = Book.with().build();
         assertThat(logservice.getLogmessages()).isEmpty();
-        List<Book> booksAfterDelete = bokbase.removeBook(username, deleteCandidate);
-        assertThat(logservice.getLogmessages()).isNotEmpty();
-        assertThat(booksAfterDelete).isEmpty();
+        BokbaseException e = assertThrows(BokbaseException.class, () -> bokbase.removeBook(username, deleteCandidate));
+        assertThat(e.getMessage()).startsWith("Unable to remove book for user jad");
     }
 
     @Test
@@ -431,9 +427,8 @@ class BokbaseServiceProviderTest {
         bokbase.setDatasource(datasourceWithFailure);
         bokbase.activate(Collections.singletonMap("defaultlocale", "nb_NO"));
         assertThat(logservice.getLogmessages()).isEmpty();
-        List<Author> authors = bokbase.listAuthors();
-        assertThat(logservice.getLogmessages()).isNotEmpty();
-        assertThat(authors).isEmpty();
+        BokbaseException e = assertThrows(BokbaseException.class, () -> bokbase.listAuthors());
+        assertThat(e.getMessage()).startsWith("Unable to list authors");
     }
 
     @Test
@@ -470,9 +465,8 @@ class BokbaseServiceProviderTest {
         bokbase.activate(Collections.singletonMap("defaultlocale", "nb_NO"));
         Author newAuthor = Author.with().firstname("Michael").lastname("Moorcock").build();
         assertThat(logservice.getLogmessages()).isEmpty();
-        AuthorsWithAddedAuthorId authorsWithAddedAuthorId = bokbase.addAuthor(newAuthor);
-        assertThat(logservice.getLogmessages()).isNotEmpty();
-        assertThat(authorsWithAddedAuthorId.getAuthors()).isEmpty();
+        BokbaseException e = assertThrows(BokbaseException.class, () -> bokbase.addAuthor(newAuthor));
+        assertThat(e.getMessage()).startsWith("Unable to add author");
     }
 
     @Test
@@ -517,9 +511,8 @@ class BokbaseServiceProviderTest {
 
         Author modifiedAuthor = Author.with().build();
         assertThat(logservice.getLogmessages()).isEmpty();
-        List<Author> updatedAuthors = bokbase.updateAuthor(modifiedAuthor);
-        assertThat(logservice.getLogmessages()).isNotEmpty();
-        assertThat(updatedAuthors).isEmpty();
+        BokbaseException e = assertThrows(BokbaseException.class, () -> bokbase.updateAuthor(modifiedAuthor));
+        assertThat(e.getMessage()).startsWith("Unable to update author");
     }
 
     @Test
@@ -559,9 +552,8 @@ class BokbaseServiceProviderTest {
             .findFirst()
             .orElse(null);
         assertThat(logservice.getLogmessages()).isEmpty();
-        List<Author> authorsAfterRemove = bokbase.removeAuthor(authorUsedInBook);
-        assertThat(logservice.getLogmessages()).isNotEmpty();
-        assertThat(authorsAfterRemove).contains(authorUsedInBook);
+        BokbaseException e = assertThrows(BokbaseException.class, () -> bokbase.removeAuthor(authorUsedInBook));
+        assertThat(e.getMessage()).startsWith("Unable to remove author");
     }
 
     @Test
@@ -591,9 +583,8 @@ class BokbaseServiceProviderTest {
         bokbase.setDatasource(datasourceWithFailure);
         bokbase.activate(Collections.singletonMap("defaultlocale", "nb_NO"));
         assertThat(logservice.getLogmessages()).isEmpty();
-        List<Publisher> publishers = bokbase.listPublishers();
-        assertThat(logservice.getLogmessages()).isNotEmpty();
-        assertThat(publishers).isEmpty();
+        BokbaseException e = assertThrows(BokbaseException.class, () -> bokbase.listPublishers());
+        assertThat(e.getMessage()).startsWith("Unable to list publishers");
     }
 
     @Test
@@ -629,13 +620,12 @@ class BokbaseServiceProviderTest {
         bokbase.activate(Collections.singletonMap("defaultlocale", "nb_NO"));
         Publisher newPublisher = Publisher.with().name("TOR Books").build();
         assertThat(logservice.getLogmessages()).isEmpty();
-        PublishersWithAddedPublisherId publishersWithAddedPublisherId = bokbase.addPublisher(newPublisher);
-        assertThat(logservice.getLogmessages()).isNotEmpty();
-        assertThat(publishersWithAddedPublisherId.getPublishers()).isEmpty();
+        BokbaseException e = assertThrows(BokbaseException.class, () -> bokbase.addPublisher(newPublisher));
+        assertThat(e.getMessage()).startsWith("Unable to add publisher");
     }
 
     @Test
-    void testUpdatePublisher() {
+    void testUpdatePublsher() {
         BokbaseServiceProvider bokbase = new BokbaseServiceProvider();
         MockLogService logservice = new MockLogService();
         bokbase.setLogservice(logservice);
@@ -675,9 +665,8 @@ class BokbaseServiceProviderTest {
 
         Publisher modifiedPublisher = Publisher.with().build();
         assertThat(logservice.getLogmessages()).isEmpty();
-        List<Publisher> updatedPublishers = bokbase.updatePublisher(modifiedPublisher);
-        assertThat(logservice.getLogmessages()).isNotEmpty();
-        assertThat(updatedPublishers).isEmpty();
+        BokbaseException e = assertThrows(BokbaseException.class, () -> bokbase.updatePublisher(modifiedPublisher));
+        assertThat(e.getMessage()).startsWith("Unable to update publisher");
     }
 
     @Test
@@ -717,9 +706,8 @@ class BokbaseServiceProviderTest {
             .findFirst()
             .orElse(null);
         assertThat(logservice.getLogmessages()).isEmpty();
-        List<Publisher> publishersAfterRemove = bokbase.removePublisher(publisherUsedInBook);
-        assertThat(logservice.getLogmessages()).isNotEmpty();
-        assertThat(publishersAfterRemove).contains(publisherUsedInBook);
+        BokbaseException e = assertThrows(BokbaseException.class, () -> bokbase.removePublisher(publisherUsedInBook));
+        assertThat(e.getMessage()).startsWith("Unable to remove publisher");
     }
 
     @Test
@@ -775,9 +763,8 @@ class BokbaseServiceProviderTest {
         bokbase.setDatasource(datasourceWithFailure);
         bokbase.activate(Collections.singletonMap("defaultlocale", "nb_NO"));
         assertThat(logservice.getLogmessages()).isEmpty();
-        List<Series> serieslist = bokbase.listSeries();
-        assertThat(logservice.getLogmessages()).isNotEmpty();
-        assertThat(serieslist).isEmpty();
+        BokbaseException e = assertThrows(BokbaseException.class, () -> bokbase.listSeries());
+        assertThat(e.getMessage()).startsWith("Unable to list series");
     }
 
     @Test
@@ -813,9 +800,8 @@ class BokbaseServiceProviderTest {
         bokbase.activate(Collections.singletonMap("defaultlocale", "nb_NO"));
         Series newSeries = Series.with().name("Expanse").build();
         assertThat(logservice.getLogmessages()).isEmpty();
-        SeriesWithAddedSeriesId seriesWithAddedPublisherId = bokbase.addSeries(newSeries);
-        assertThat(logservice.getLogmessages()).isNotEmpty();
-        assertThat(seriesWithAddedPublisherId.getSeries()).isEmpty();
+        BokbaseException e = assertThrows(BokbaseException.class, () -> bokbase.addSeries(newSeries));
+        assertThat(e.getMessage()).startsWith("Unable to add series");
     }
 
     @Test
@@ -859,9 +845,8 @@ class BokbaseServiceProviderTest {
 
         Series modifiedSeries = Series.with().name("Time of Heroes").build();
         assertThat(logservice.getLogmessages()).isEmpty();
-        List<Series> seriesWithupdatedSeries = bokbase.updateSeries(modifiedSeries);
-        assertThat(logservice.getLogmessages()).isNotEmpty();
-        assertThat(seriesWithupdatedSeries).isEmpty();
+        BokbaseException e = assertThrows(BokbaseException.class, () -> bokbase.updateSeries(modifiedSeries));
+        assertThat(e.getMessage()).startsWith("Unable to update series");
     }
 
     @Test
@@ -902,10 +887,8 @@ class BokbaseServiceProviderTest {
             .findFirst()
             .orElse(null);
         assertThat(logservice.getLogmessages()).isEmpty();
-        List<Series> seriesAfterRemove = bokbase.removeSeries(seriesToRemove);
-        assertThat(logservice.getLogmessages()).isNotEmpty();
-        assertThat(seriesBeforeRemove).contains(seriesToRemove);
-        assertThat(seriesAfterRemove).contains(seriesToRemove);
+        BokbaseException e = assertThrows(BokbaseException.class, () -> bokbase.removeSeries(seriesToRemove));
+        assertThat(e.getMessage()).startsWith("Unable to remove series");
     }
 
 }

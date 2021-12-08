@@ -41,6 +41,7 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.log.LogService;
 import org.osgi.service.log.Logger;
 
+import no.priv.bang.bokbase.services.BokbaseException;
 import no.priv.bang.bokbase.services.BokbaseService;
 import no.priv.bang.bokbase.services.beans.Account;
 import no.priv.bang.bokbase.services.beans.Author;
@@ -173,7 +174,7 @@ public class BokbaseServiceProvider implements BokbaseService {
                 }
             }
         } catch (SQLException e) {
-            logger.error("Unable to list books for user {}", username, e);
+            throw new BokbaseException(String.format("Unable to list books for user %s", username), e);
         }
 
         return books;
@@ -223,7 +224,7 @@ public class BokbaseServiceProvider implements BokbaseService {
                 statement.executeUpdate();
             }
         } catch (SQLException e) {
-            logger.error("Unable to add book for user {}", username, e);
+            throw new BokbaseException(String.format("Unable to add book for user %s", username), e);
         }
 
         return BooksWithAddedBookId.with()
@@ -270,7 +271,7 @@ public class BokbaseServiceProvider implements BokbaseService {
                 statement.executeUpdate();
             }
         } catch (SQLException e) {
-            logger.error("Unable to modify book for user {}", username, e);
+            throw new BokbaseException(String.format("Unable to modify book for user %s", username), e);
         }
 
         return listBooks(username);
@@ -300,7 +301,7 @@ public class BokbaseServiceProvider implements BokbaseService {
                 statement.executeUpdate();
             }
         } catch (SQLException e) {
-            logger.error("Unable to remove book for user {}", username, e);
+            throw new BokbaseException(String.format("Unable to remove book for user %s", username), e);
         }
 
         return listBooks(username);
@@ -319,7 +320,7 @@ public class BokbaseServiceProvider implements BokbaseService {
                 }
             }
         } catch (SQLException e) {
-            logger.error("Unable to list authors", e);
+            throw new BokbaseException("Unable to list authors", e);
         }
 
         return authors;
@@ -342,7 +343,7 @@ public class BokbaseServiceProvider implements BokbaseService {
                 }
             }
         } catch (SQLException e) {
-            logger.error("Unable to add author", e);
+            throw new BokbaseException("Unable to add author", e);
         }
 
         return AuthorsWithAddedAuthorId.with()
@@ -362,7 +363,7 @@ public class BokbaseServiceProvider implements BokbaseService {
                 statement.executeUpdate();
             }
         } catch (SQLException e) {
-            logger.error("Unable to update author", e);
+            throw new BokbaseException("Unable to update author", e);
         }
 
         return listAuthors();
@@ -377,7 +378,7 @@ public class BokbaseServiceProvider implements BokbaseService {
                 statement.executeUpdate();
             }
         } catch (SQLException e) {
-            logger.error("Unable to remove author", e);
+            throw new BokbaseException("Unable to remove author", e);
         }
 
         return listAuthors();
@@ -396,7 +397,7 @@ public class BokbaseServiceProvider implements BokbaseService {
                 }
             }
         } catch (SQLException e) {
-            logger.error("Unable to list publishers", e);
+            throw new BokbaseException("Unable to list publishers", e);
         }
 
         return publishers;
@@ -418,7 +419,7 @@ public class BokbaseServiceProvider implements BokbaseService {
                 }
             }
         } catch (SQLException e) {
-            logger.error("Unable to add publisher", e);
+            throw new BokbaseException("Unable to add publisher", e);
         }
 
         return PublishersWithAddedPublisherId.with()
@@ -437,7 +438,7 @@ public class BokbaseServiceProvider implements BokbaseService {
                 statement.executeUpdate();
             }
         } catch (SQLException e) {
-            logger.error("Unable to update publisher", e);
+            throw new BokbaseException("Unable to update publisher", e);
         }
 
         return listPublishers();
@@ -452,7 +453,7 @@ public class BokbaseServiceProvider implements BokbaseService {
                 statement.executeUpdate();
             }
         } catch (SQLException e) {
-            logger.error("Unable to remove publisher", e);
+            throw new BokbaseException("Unable to remove publisher", e);
         }
 
         return listPublishers();
@@ -471,7 +472,7 @@ public class BokbaseServiceProvider implements BokbaseService {
                 }
             }
         } catch (SQLException e) {
-            logger.error("Unable to list publishers", e);
+            throw new BokbaseException("Unable to list series", e);
         }
 
         return series;
@@ -493,7 +494,7 @@ public class BokbaseServiceProvider implements BokbaseService {
                 }
             }
         } catch (SQLException e) {
-            logger.error("Unable to add series", e);
+            throw new BokbaseException("Unable to add series", e);
         }
 
         return SeriesWithAddedSeriesId.with()
@@ -512,7 +513,7 @@ public class BokbaseServiceProvider implements BokbaseService {
                 statement.executeUpdate();
             }
         } catch (SQLException e) {
-            logger.error("Unable to update publisher", e);
+            throw new BokbaseException("Unable to update series", e);
         }
 
         return listSeries();
@@ -527,7 +528,7 @@ public class BokbaseServiceProvider implements BokbaseService {
                 statement.executeUpdate();
             }
         } catch (SQLException e) {
-            logger.error("Unable to remove publisher", e);
+            throw new BokbaseException("Unable to remove series", e);
         }
 
         return listSeries();
