@@ -57,12 +57,12 @@ import no.priv.bang.bokbase.services.beans.AuthorsWithAddedAuthorId;
 import no.priv.bang.bokbase.services.beans.Book;
 import no.priv.bang.bokbase.services.beans.BooksWithAddedBookId;
 import no.priv.bang.bokbase.services.beans.Credentials;
+import no.priv.bang.bokbase.services.beans.ErrorMessage;
 import no.priv.bang.bokbase.services.beans.LocaleBean;
 import no.priv.bang.bokbase.services.beans.Publisher;
 import no.priv.bang.bokbase.services.beans.PublishersWithAddedPublisherId;
 import no.priv.bang.bokbase.services.beans.Series;
 import no.priv.bang.bokbase.services.beans.SeriesWithAddedSeriesId;
-import no.priv.bang.bokbase.web.api.resources.ErrorMessage;
 import no.priv.bang.osgi.service.mocks.logservice.MockLogService;
 
 class BokbaseWebApiTest extends ShiroTestBase {
@@ -254,20 +254,20 @@ class BokbaseWebApiTest extends ShiroTestBase {
         BokbaseService bokbase = mock(BokbaseService.class);
         when(bokbase.listBooks(anyString())).thenThrow(BokbaseException.class);
         MockLogService logservice = new MockLogService();
-    
+
         BokbaseWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(bokbase , logservice);
-    
+
         // Create the request and response
         MockHttpServletRequest request = buildGetUrl("/books/jad");
         MockHttpServletResponse response = new MockHttpServletResponse();
-    
+
         // Run the method under test
         servlet.service(request, response);
-    
+
         // Check the response
         assertEquals(500, response.getStatus());
         assertEquals("application/json", response.getContentType());
-        no.priv.bang.bokbase.services.beans.ErrorMessage errorMessage = mapper.readValue(getBinaryContent(response), no.priv.bang.bokbase.services.beans.ErrorMessage.class);
+        ErrorMessage errorMessage = mapper.readValue(getBinaryContent(response), ErrorMessage.class);
         assertThat(errorMessage.getMessage()).isNull();
     }
 

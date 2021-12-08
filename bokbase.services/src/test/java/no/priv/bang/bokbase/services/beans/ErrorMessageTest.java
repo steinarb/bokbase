@@ -23,8 +23,13 @@ class ErrorMessageTest {
 
     @Test
     void testCreate() {
+        Integer status = 500;
         String message = "Database failure";
-        ErrorMessage bean = ErrorMessage.with().message(message).build();
+        ErrorMessage bean = ErrorMessage.with()
+            .status(status)
+            .message(message)
+            .build();
+        assertEquals(status, bean.getStatus());
         assertEquals(message, bean.getMessage());
     }
 

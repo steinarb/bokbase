@@ -18,11 +18,16 @@ package no.priv.bang.bokbase.services.beans;
 public class ErrorMessage {
 
     private String message;
+    private Integer status;
 
     private ErrorMessage() { }
 
     public String getMessage() {
         return message;
+    }
+
+    public Integer getStatus() {
+        return status;
     }
 
     public static Builder with() {
@@ -32,17 +37,24 @@ public class ErrorMessage {
     public static class Builder {
 
         private String message;
+        private Integer status;
 
         private Builder() { }
 
         public ErrorMessage build() {
             ErrorMessage bean = new ErrorMessage();
             bean.message = this.message;
+            bean.status = this.status;
             return bean;
         }
 
         public Builder message(String message) {
             this.message = message;
+            return this;
+        }
+
+        public Builder status(Integer status) {
+            this.status = status;
             return this;
         }
 

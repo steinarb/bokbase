@@ -18,6 +18,8 @@ package no.priv.bang.bokbase.web.api.resources;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import no.priv.bang.bokbase.services.beans.ErrorMessage;
+
 public class ResourceBase {
 
     public ResourceBase() {
@@ -27,7 +29,7 @@ public class ResourceBase {
     protected Response response(int status, String message) {
         return Response
             .status(status)
-            .entity(new ErrorMessage(status, message))
+            .entity(ErrorMessage.with().status(status).message(message).build())
             .type(MediaType.APPLICATION_JSON)
             .build();
     }
