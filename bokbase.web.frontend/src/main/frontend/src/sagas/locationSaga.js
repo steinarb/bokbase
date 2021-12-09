@@ -3,6 +3,7 @@ import { LOCATION_CHANGE } from 'connected-react-router';
 import {
     BOOKS_REQUEST,
     SELECT_BOOK,
+    SELECT_AUTHOR,
     ACCOUNTS_REQUEST,
 } from '../reduxactions';
 
@@ -24,6 +25,12 @@ function* locationChange(action) {
         const bookId = yield select(state => state.bookId);
         if (bookId) {
             yield put(SELECT_BOOK());
+        }
+    }
+    if (pathname === '/authors/add') {
+        const authorId = yield select(state => state.authorId);
+        if (authorId) {
+            yield put(SELECT_AUTHOR());
         }
     }
 }
