@@ -5,6 +5,7 @@ import {
     SELECT_BOOK,
     SELECT_AUTHOR,
     SELECT_PUBLISHER,
+    SELECT_SERIES,
     ACCOUNTS_REQUEST,
 } from '../reduxactions';
 
@@ -38,6 +39,12 @@ function* locationChange(action) {
         const publisherId = yield select(state => state.publisherId);
         if (publisherId) {
             yield put(SELECT_PUBLISHER());
+        }
+    }
+    if (pathname === '/series/add') {
+        const seriesId = yield select(state => state.seriesId);
+        if (seriesId) {
+            yield put(SELECT_SERIES());
         }
     }
 }
