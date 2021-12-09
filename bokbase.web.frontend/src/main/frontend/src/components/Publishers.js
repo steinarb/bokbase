@@ -76,7 +76,7 @@ function Publishers(props) {
 
 function mapStateToProps(state) {
     const {
-        loginresultat,
+        loginresult,
         publishers,
         publisherModified,
         publisherId,
@@ -85,7 +85,7 @@ function mapStateToProps(state) {
     const text = state.displayTexts;
     return {
         text,
-        loginresultat,
+        loginresult,
         publishers,
         publisherModified,
         publisherId: emptyStringWhenFalsy(publisherId),

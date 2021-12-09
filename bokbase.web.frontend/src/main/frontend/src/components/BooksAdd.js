@@ -212,7 +212,7 @@ function BooksAdd(props) {
 
 function mapStateToProps(state) {
     const {
-        loginresultat,
+        loginresult,
         authors,
         series,
         publishers,
@@ -235,7 +235,7 @@ function mapStateToProps(state) {
     const text = state.displayTexts;
     return {
         text,
-        loginresultat,
+        loginresult,
         authors,
         series,
         publishers,

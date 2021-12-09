@@ -15,30 +15,32 @@
  */
 package no.priv.bang.bokbase.services.beans;
 
+import no.priv.bang.osgiservice.users.User;
+
 public class Loginresult {
 
-    private boolean suksess;
-    private String feilmelding;
+    private boolean success;
+    private String errormessage;
     private boolean authorized;
-    private String username;
+    public User user;
     private String originalRequestUrl;
 
     private Loginresult() {}
 
-    public boolean getSuksess() {
-        return suksess;
+    public boolean getSuccess() {
+        return success;
     }
 
-    public String getFeilmelding() {
-        return feilmelding;
+    public String getErrormessage() {
+        return errormessage;
     }
 
     public boolean isAuthorized() {
         return authorized;
     }
 
-    public String getUsername() {
-        return username;
+    public User getUser() {
+        return user;
     }
 
     public String getOriginalRequestUrl() {
@@ -47,7 +49,7 @@ public class Loginresult {
 
     @Override
     public String toString() {
-        return "Loginresultat [suksess=" + suksess + ", feilmelding=" + feilmelding + ", authorized=" + authorized + "originalRequestUrl=" + originalRequestUrl + "]";
+        return "Loginresult [success=" + success + ", errormessage=" + errormessage + ", authorized=" + authorized + "originalRequestUrl=" + originalRequestUrl + "]";
     }
 
     public static LoginresultBuilder with() {
@@ -55,31 +57,31 @@ public class Loginresult {
     }
 
     public static class LoginresultBuilder {
-        private boolean suksess;
-        private String feilmelding;
+        private boolean success;
+        private String errormessage;
         private boolean authorized;
-        private String username;
+        private User user;
         private String originalRequestUrl;
 
         private LoginresultBuilder() {}
 
         public Loginresult build() {
-            Loginresult loginresultat = new Loginresult();
-            loginresultat.suksess = this.suksess;
-            loginresultat.feilmelding = this.feilmelding;
-            loginresultat.authorized = authorized;
-            loginresultat.username = username;
-            loginresultat.originalRequestUrl = originalRequestUrl;
-            return loginresultat;
+            Loginresult loginresult = new Loginresult();
+            loginresult.success = this.success;
+            loginresult.errormessage = this.errormessage;
+            loginresult.authorized = authorized;
+            loginresult.user = user;
+            loginresult.originalRequestUrl = originalRequestUrl;
+            return loginresult;
         }
 
-        public LoginresultBuilder suksess(boolean suksess) {
-            this.suksess = suksess;
+        public LoginresultBuilder success(boolean success) {
+            this.success = success;
             return this;
         }
 
-        public LoginresultBuilder feilmelding(String feilmelding) {
-            this.feilmelding = feilmelding;
+        public LoginresultBuilder errormessage(String errormessage) {
+            this.errormessage = errormessage;
             return this;
         }
 
@@ -88,8 +90,8 @@ public class Loginresult {
             return this;
         }
 
-        public LoginresultBuilder username(String username) {
-            this.username = username;
+        public LoginresultBuilder user(User user) {
+            this.user = user;
             return this;
         }
 

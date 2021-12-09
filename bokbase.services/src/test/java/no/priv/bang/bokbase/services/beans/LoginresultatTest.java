@@ -20,34 +20,37 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-class LoginresultatTest {
+import no.priv.bang.osgiservice.users.User;
+
+class LoginresultTest {
 
     @Test
     void testCreate() {
-        boolean suksess = true;
+        boolean success = true;
         boolean authorized = true;
-        String feilmelding = "Feil passord";
-        String originalRequestUrl = "http://localhost:8181/bokbase/hurtigregistrering";
+        String errormessage = "Feil passord";
+        String originalRequestUrl = "http://localhost:8181/sampleapp/hurtigregistrering";
         String username = "jod";
+        User user = User.with().username(username).build();
         Loginresult bean = Loginresult.with()
-            .suksess(suksess)
-            .feilmelding(feilmelding)
+            .success(success)
+            .errormessage(errormessage)
             .authorized(authorized)
-            .username(username)
+            .user(user)
             .originalRequestUrl(originalRequestUrl)
             .build();
-        assertTrue(bean.getSuksess());
-        assertEquals(feilmelding, bean.getFeilmelding());
+        assertTrue(bean.getSuccess());
+        assertEquals(errormessage, bean.getErrormessage());
         assertTrue(bean.isAuthorized());
-        assertEquals(username, bean.getUsername());
+        assertEquals(username, bean.getUser().getUsername());
         assertEquals(originalRequestUrl, bean.getOriginalRequestUrl());
     }
 
     @Test
     void testNoargsConstructor() {
         Loginresult bean = Loginresult.with().build();
-        assertFalse(bean.getSuksess());
-        assertNull(bean.getFeilmelding());
+        assertFalse(bean.getSuccess());
+        assertNull(bean.getErrormessage());
         assertFalse(bean.isAuthorized());
         assertNull(bean.getOriginalRequestUrl());
     }
@@ -55,7 +58,7 @@ class LoginresultatTest {
     @Test
     void testToString() {
         Loginresult bean = Loginresult.with().build();
-        assertThat(bean.toString()).startsWith("Loginresultat [");
+        assertThat(bean.toString()).startsWith("Loginresult [");
     }
 
 }

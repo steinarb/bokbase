@@ -59,14 +59,14 @@ function PublishersAdd(props) {
 
 function mapStateToProps(state) {
     const {
-        loginresultat,
+        loginresult,
         publisherModified,
         publisherName,
     } = state;
     const text = state.displayTexts;
     return {
         text,
-        loginresultat,
+        loginresult,
         publisherModified,
         publisherName: emptyStringWhenFalsy(publisherName),
     };

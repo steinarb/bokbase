@@ -76,7 +76,7 @@ function Series(props) {
 
 function mapStateToProps(state) {
     const {
-        loginresultat,
+        loginresult,
         series,
         seriesModified,
         seriesId,
@@ -85,7 +85,7 @@ function mapStateToProps(state) {
     const text = state.displayTexts;
     return {
         text,
-        loginresultat,
+        loginresult,
         series,
         seriesModified,
         seriesId: emptyStringWhenFalsy(seriesId),

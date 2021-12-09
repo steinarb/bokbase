@@ -28,6 +28,7 @@ import org.osgi.service.http.whiteboard.propertytypes.HttpWhiteboardServletPatte
 import org.osgi.service.log.LogService;
 
 import no.priv.bang.bokbase.services.BokbaseService;
+import no.priv.bang.osgiservice.users.UserManagementService;
 import no.priv.bang.servlet.jersey.JerseyServlet;
 
 
@@ -45,8 +46,13 @@ public class BokbaseWebApi extends JerseyServlet {
     }
 
     @Reference
-    public void setSampleappService(BokbaseService bokbase) {
+    public void setBokbaseService(BokbaseService bokbase) {
         addInjectedOsgiService(BokbaseService.class, bokbase);
+    }
+
+    @Reference
+    public void setUseradmin(UserManagementService useradmin) {
+        addInjectedOsgiService(UserManagementService.class, useradmin);
     }
 
     @Activate

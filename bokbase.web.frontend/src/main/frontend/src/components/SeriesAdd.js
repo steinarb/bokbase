@@ -58,14 +58,14 @@ function SeriesAdd(props) {
 
 function mapStateToProps(state) {
     const {
-        loginresultat,
+        loginresult,
         seriesModified,
         seriesName,
     } = state;
     const text = state.displayTexts;
     return {
         text,
-        loginresultat,
+        loginresult,
         seriesModified,
         seriesName: emptyStringWhenFalsy(seriesName),
     };

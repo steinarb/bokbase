@@ -79,7 +79,7 @@ function* receiveRemoveBookResultat(action) {
 }
 
 function* getBooksWhenLoginstateArrives(action) {
-    const { username } = action.payload;
+    const username = action.payload.user.username;
     if (username) {
         yield put(BOOKS_REQUEST(username));
     }

@@ -41,9 +41,12 @@ import org.apache.shiro.web.util.WebUtils;
 import org.osgi.service.log.LogService;
 import org.osgi.service.log.Logger;
 
+import no.priv.bang.authservice.definitions.AuthserviceException;
 import no.priv.bang.bokbase.services.BokbaseService;
 import no.priv.bang.bokbase.services.beans.Credentials;
 import no.priv.bang.bokbase.services.beans.Loginresult;
+import no.priv.bang.osgiservice.users.User;
+import no.priv.bang.osgiservice.users.UserManagementService;
 
 @Path("")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -57,6 +60,9 @@ public class LoginResource {
 
     @Inject
     BokbaseService bokbase;
+
+    @Inject
+    UserManagementService useradmin;
 
     @Inject
     void setLogservice(LogService logservice) {
@@ -78,25 +84,27 @@ public class LoginResource {
                 bokbase.lazilyCreateAccount(username);
             }
 
+            User user = useradmin.getUser(username);
+
             return Loginresult.with()
-                .suksess(true)
-                .feilmelding("")
+                .success(true)
+                .errormessage("")
                 .authorized(authorized)
-                .username(username)
+                .user(user)
                 .originalRequestUrl(originalRequestUrl)
                 .build();
         } catch(UnknownAccountException e) {
             logger.warn("Login error: unknown account", e);
-            return Loginresult.with().suksess(false).feilmelding(bokbase.displayText("unknownaccount", locale)).build();
+            return Loginresult.with().success(false).errormessage(bokbase.displayText("unknownaccount", locale)).build();
         } catch (IncorrectCredentialsException  e) {
             logger.warn("Login error: wrong password", e);
-            return Loginresult.with().suksess(false).feilmelding(bokbase.displayText("wrongpassword", locale)).build();
+            return Loginresult.with().success(false).errormessage(bokbase.displayText("wrongpassword", locale)).build();
         } catch (LockedAccountException  e) {
             logger.warn("Login error: locked account", e);
-            return Loginresult.with().suksess(false).feilmelding(bokbase.displayText("lockedaccount", locale)).build();
+            return Loginresult.with().success(false).errormessage(bokbase.displayText("lockedaccount", locale)).build();
         } catch (AuthenticationException e) {
             logger.warn("Login error: general authentication error", e);
-            return Loginresult.with().suksess(false).feilmelding(bokbase.displayText("unknownerror", locale)).build();
+            return Loginresult.with().success(false).errormessage(bokbase.displayText("unknownerror", locale)).build();
         } catch (Exception e) {
             logger.error("Login error: internal server error", e);
             throw new InternalServerErrorException();
@@ -112,8 +120,9 @@ public class LoginResource {
         subject.logout();
 
         return Loginresult.with()
-            .suksess(false)
-            .feilmelding(bokbase.displayText("loggedout", locale))
+            .success(false)
+            .errormessage(bokbase.displayText("loggedout", locale))
+            .user(User.with().build())
             .build();
     }
 
@@ -122,18 +131,27 @@ public class LoginResource {
     public Loginresult loginstate(@QueryParam("locale")String locale) {
         Subject subject = SecurityUtils.getSubject();
         String username = (String) subject.getPrincipal();
-        boolean suksess = subject.isAuthenticated();
-        boolean harRoleSampleappuser = subject.hasRole(BOKBASEUSER_ROLE);
-        String brukerLoggetInnMelding = harRoleSampleappuser ?
+        boolean success = subject.isAuthenticated();
+        boolean harRoleBokbaseuser = subject.hasRole(BOKBASEUSER_ROLE);
+        String brukerLoggetInnMelding = harRoleBokbaseuser ?
             bokbase.displayText("userloggedinwithaccesses", locale) :
             bokbase.displayText("userloggedinwithoutaccesses", locale);
-        String melding = suksess ? brukerLoggetInnMelding : bokbase.displayText("usernotloggedin", locale);
+        String melding = success ? brukerLoggetInnMelding : bokbase.displayText("usernotloggedin", locale);
+        User user = findUserSafely(username);
         return Loginresult.with()
-            .suksess(suksess)
-            .feilmelding(melding)
-            .authorized(harRoleSampleappuser)
-            .username(username)
+            .success(success)
+            .errormessage(melding)
+            .authorized(harRoleBokbaseuser)
+            .user(user)
             .build();
+    }
+
+    User findUserSafely(String username) {
+        try {
+            return useradmin.getUser(username);
+        } catch (AuthserviceException e) {
+            return User.with().build();
+        }
     }
 
     String findOriginalRequestUrl() {

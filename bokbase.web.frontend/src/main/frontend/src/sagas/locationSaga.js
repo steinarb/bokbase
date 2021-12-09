@@ -15,7 +15,7 @@ function* locationChange(action) {
         yield put(ACCOUNTS_REQUEST());
     }
     if (pathname === '/books') {
-        const username = yield select(state => state.loginresultat.username);
+        const username = yield select(state => state.loginresult.user.username);
         if (username) {
             yield put(BOOKS_REQUEST(username));
         }

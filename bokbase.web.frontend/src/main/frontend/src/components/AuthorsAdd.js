@@ -68,7 +68,7 @@ function AuthorsAdd(props) {
 
 function mapStateToProps(state) {
     const {
-        loginresultat,
+        loginresult,
         authorModified,
         authorFirstname,
         authorLastname,
@@ -76,7 +76,7 @@ function mapStateToProps(state) {
     const text = state.displayTexts;
     return {
         text,
-        loginresultat,
+        loginresult,
         authorModified,
         authorFirstname: emptyStringWhenFalsy(authorFirstname),
         authorLastname: emptyStringWhenFalsy(authorLastname),

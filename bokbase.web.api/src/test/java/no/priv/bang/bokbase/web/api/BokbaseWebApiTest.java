@@ -64,6 +64,7 @@ import no.priv.bang.bokbase.services.beans.PublishersWithAddedPublisherId;
 import no.priv.bang.bokbase.services.beans.Series;
 import no.priv.bang.bokbase.services.beans.SeriesWithAddedSeriesId;
 import no.priv.bang.osgi.service.mocks.logservice.MockLogService;
+import no.priv.bang.osgiservice.users.UserManagementService;
 
 class BokbaseWebApiTest extends ShiroTestBase {
     private final static Locale NB_NO = Locale.forLanguageTag("nb-no");
@@ -80,7 +81,8 @@ class BokbaseWebApiTest extends ShiroTestBase {
         Credentials credentials = Credentials.with().username(username).password(password).build();
         MockLogService logservice = new MockLogService();
         BokbaseService bokbase = mock(BokbaseService.class);
-        BokbaseWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(bokbase , logservice);
+        UserManagementService useradmin = mock(UserManagementService.class);
+        BokbaseWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(bokbase , useradmin, logservice);
         createSubjectAndBindItToThread();
         MockHttpServletRequest request = buildPostUrl("/login");
         String postBody = mapper.writeValueAsString(credentials);
@@ -89,7 +91,6 @@ class BokbaseWebApiTest extends ShiroTestBase {
 
         servlet.service(request, response);
         assertEquals(200, response.getStatus());
-
     }
 
     @Test
@@ -99,7 +100,8 @@ class BokbaseWebApiTest extends ShiroTestBase {
         Credentials credentials = Credentials.with().username(username).password(password).build();
         MockLogService logservice = new MockLogService();
         BokbaseService bokbase = mock(BokbaseService.class);
-        BokbaseWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(bokbase , logservice);
+        UserManagementService useradmin = mock(UserManagementService.class);
+        BokbaseWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(bokbase , useradmin, logservice);
         createSubjectAndBindItToThread();
         MockHttpServletRequest request = buildPostUrl("/login");
         String postBody = mapper.writeValueAsString(credentials);
@@ -116,7 +118,8 @@ class BokbaseWebApiTest extends ShiroTestBase {
         BokbaseService bokbase = mock(BokbaseService.class);
         Account account = Account.with().accountId(123).build();
         when(bokbase.getAccounts()).thenReturn(Collections.singletonList(account));
-        BokbaseWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(bokbase , logservice);
+        UserManagementService useradmin = mock(UserManagementService.class);
+        BokbaseWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(bokbase , useradmin, logservice);
         MockHttpServletRequest request = buildGetUrl("/accounts");
         MockHttpServletResponse response = new MockHttpServletResponse();
 
@@ -133,7 +136,8 @@ class BokbaseWebApiTest extends ShiroTestBase {
         when(bokbase.defaultLocale()).thenReturn(NB_NO);
         MockLogService logservice = new MockLogService();
 
-        BokbaseWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(bokbase , logservice);
+        UserManagementService useradmin = mock(UserManagementService.class);
+        BokbaseWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(bokbase , useradmin, logservice);
 
         // Create the request and response
         MockHttpServletRequest request = buildGetUrl("/defaultlocale");
@@ -154,8 +158,9 @@ class BokbaseWebApiTest extends ShiroTestBase {
         BokbaseService bokbase = mock(BokbaseService.class);
         when(bokbase.availableLocales()).thenReturn(Collections.singletonList(Locale.forLanguageTag("nb-NO")).stream().map(l -> LocaleBean.with().locale(l).build()).collect(Collectors.toList()));
         MockLogService logservice = new MockLogService();
+        UserManagementService useradmin = mock(UserManagementService.class);
 
-        BokbaseWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(bokbase , logservice);
+        BokbaseWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(bokbase , useradmin, logservice);
 
         // Create the request and response
         MockHttpServletRequest request = buildGetUrl("/availablelocales");
@@ -179,8 +184,9 @@ class BokbaseWebApiTest extends ShiroTestBase {
         texts.put("date", "Dato");
         when(bokbase.displayTexts(NB_NO)).thenReturn(texts);
         MockLogService logservice = new MockLogService();
+        UserManagementService useradmin = mock(UserManagementService.class);
 
-        BokbaseWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(bokbase , logservice);
+        BokbaseWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(bokbase , useradmin, logservice);
 
         // Create the request and response
         MockHttpServletRequest request = buildGetUrl("/displaytexts");
@@ -205,8 +211,9 @@ class BokbaseWebApiTest extends ShiroTestBase {
         texts.put("date", "Dato");
         when(bokbase.displayTexts(EN_UK)).thenThrow(MissingResourceException.class);
         MockLogService logservice = new MockLogService();
+        UserManagementService useradmin = mock(UserManagementService.class);
 
-        BokbaseWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(bokbase , logservice);
+        BokbaseWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(bokbase , useradmin, logservice);
 
         // Create the request and response
         MockHttpServletRequest request = buildGetUrl("/displaytexts");
@@ -231,8 +238,9 @@ class BokbaseWebApiTest extends ShiroTestBase {
         String title = "Memory";
         when(bokbase.listBooks(anyString())).thenReturn(Arrays.asList(Book.with().title(title).build()));
         MockLogService logservice = new MockLogService();
+        UserManagementService useradmin = mock(UserManagementService.class);
 
-        BokbaseWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(bokbase , logservice);
+        BokbaseWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(bokbase , useradmin, logservice);
 
         // Create the request and response
         MockHttpServletRequest request = buildGetUrl("/books/jad");
@@ -254,8 +262,9 @@ class BokbaseWebApiTest extends ShiroTestBase {
         BokbaseService bokbase = mock(BokbaseService.class);
         when(bokbase.listBooks(anyString())).thenThrow(BokbaseException.class);
         MockLogService logservice = new MockLogService();
+        UserManagementService useradmin = mock(UserManagementService.class);
 
-        BokbaseWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(bokbase , logservice);
+        BokbaseWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(bokbase , useradmin, logservice);
 
         // Create the request and response
         MockHttpServletRequest request = buildGetUrl("/books/jad");
@@ -280,8 +289,9 @@ class BokbaseWebApiTest extends ShiroTestBase {
         BokbaseService bokbase = mock(BokbaseService.class);
         when(bokbase.addBook(anyString(), any())).thenReturn(BooksWithAddedBookId.with().addedBookId(newBookId).books(books).build());
         MockLogService logservice = new MockLogService();
+        UserManagementService useradmin = mock(UserManagementService.class);
 
-        BokbaseWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(bokbase , logservice);
+        BokbaseWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(bokbase , useradmin, logservice);
 
         // Create the request and response
         MockHttpServletRequest request = buildPostUrl("/book/add");
@@ -309,8 +319,9 @@ class BokbaseWebApiTest extends ShiroTestBase {
         BokbaseService bokbase = mock(BokbaseService.class);
         when(bokbase.updateBook(anyString(), any())).thenReturn(books);
         MockLogService logservice = new MockLogService();
+        UserManagementService useradmin = mock(UserManagementService.class);
 
-        BokbaseWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(bokbase , logservice);
+        BokbaseWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(bokbase , useradmin, logservice);
 
         // Create the request and response
         MockHttpServletRequest request = buildPostUrl("/book/update");
@@ -336,8 +347,9 @@ class BokbaseWebApiTest extends ShiroTestBase {
         BokbaseService bokbase = mock(BokbaseService.class);
         when(bokbase.removeBook(anyString(), any())).thenReturn(Collections.emptyList());
         MockLogService logservice = new MockLogService();
+        UserManagementService useradmin = mock(UserManagementService.class);
 
-        BokbaseWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(bokbase , logservice);
+        BokbaseWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(bokbase , useradmin, logservice);
 
         // Create the request and response
         MockHttpServletRequest request = buildPostUrl("/book/update");
@@ -367,8 +379,9 @@ class BokbaseWebApiTest extends ShiroTestBase {
         BokbaseService bokbase = mock(BokbaseService.class);
         when(bokbase.listAuthors()).thenReturn(Collections.singletonList(author));
         MockLogService logservice = new MockLogService();
+        UserManagementService useradmin = mock(UserManagementService.class);
 
-        BokbaseWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(bokbase , logservice);
+        BokbaseWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(bokbase , useradmin, logservice);
 
         // Create the request and response
         MockHttpServletRequest request = buildGetUrl("/authors");
@@ -397,8 +410,9 @@ class BokbaseWebApiTest extends ShiroTestBase {
         List<Author> authors = Collections.singletonList(addedAuthor);
         when(bokbase.addAuthor(any())).thenReturn(AuthorsWithAddedAuthorId.with().addedAuthorId(addedAuthorId).authors(authors).build());
         MockLogService logservice = new MockLogService();
+        UserManagementService useradmin = mock(UserManagementService.class);
 
-        BokbaseWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(bokbase , logservice);
+        BokbaseWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(bokbase , useradmin, logservice);
 
         // Create the request and response
         MockHttpServletRequest request = buildPostUrl("/author/add");
@@ -430,8 +444,9 @@ class BokbaseWebApiTest extends ShiroTestBase {
         List<Author> authors = Collections.singletonList(modifiedAuthor);
         when(bokbase.updateAuthor(any())).thenReturn(authors);
         MockLogService logservice = new MockLogService();
+        UserManagementService useradmin = mock(UserManagementService.class);
 
-        BokbaseWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(bokbase , logservice);
+        BokbaseWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(bokbase , useradmin, logservice);
 
         // Create the request and response
         MockHttpServletRequest request = buildPostUrl("/author/update");
@@ -463,8 +478,9 @@ class BokbaseWebApiTest extends ShiroTestBase {
         List<Author> authors = Collections.singletonList(Author.with().firstname("Other").lastname("Author").build());
         when(bokbase.removeAuthor(any())).thenReturn(authors);
         MockLogService logservice = new MockLogService();
+        UserManagementService useradmin = mock(UserManagementService.class);
 
-        BokbaseWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(bokbase , logservice);
+        BokbaseWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(bokbase , useradmin, logservice);
 
         // Create the request and response
         MockHttpServletRequest request = buildPostUrl("/author/remove");
@@ -492,8 +508,9 @@ class BokbaseWebApiTest extends ShiroTestBase {
         BokbaseService bokbase = mock(BokbaseService.class);
         when(bokbase.listPublishers()).thenReturn(Collections.singletonList(publisher));
         MockLogService logservice = new MockLogService();
+        UserManagementService useradmin = mock(UserManagementService.class);
 
-        BokbaseWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(bokbase , logservice);
+        BokbaseWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(bokbase , useradmin, logservice);
 
         // Create the request and response
         MockHttpServletRequest request = buildGetUrl("/publishers");
@@ -518,8 +535,9 @@ class BokbaseWebApiTest extends ShiroTestBase {
         BokbaseService bokbase = mock(BokbaseService.class);
         when(bokbase.addPublisher(any())).thenReturn(PublishersWithAddedPublisherId.with().addedPublisherId(addedPublisherId).publishers(Collections.singletonList(addedPublisher)).build());
         MockLogService logservice = new MockLogService();
+        UserManagementService useradmin = mock(UserManagementService.class);
 
-        BokbaseWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(bokbase , logservice);
+        BokbaseWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(bokbase , useradmin, logservice);
 
         // Create the request and response
         MockHttpServletRequest request = buildPostUrl("/publisher/add");
@@ -546,8 +564,9 @@ class BokbaseWebApiTest extends ShiroTestBase {
         BokbaseService bokbase = mock(BokbaseService.class);
         when(bokbase.updatePublisher(any())).thenReturn(Collections.singletonList(modifiedPublisher));
         MockLogService logservice = new MockLogService();
+        UserManagementService useradmin = mock(UserManagementService.class);
 
-        BokbaseWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(bokbase , logservice);
+        BokbaseWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(bokbase , useradmin, logservice);
 
         // Create the request and response
         MockHttpServletRequest request = buildPostUrl("/publisher/update");
@@ -574,8 +593,9 @@ class BokbaseWebApiTest extends ShiroTestBase {
         BokbaseService bokbase = mock(BokbaseService.class);
         when(bokbase.removePublisher(any())).thenReturn(Collections.singletonList(Publisher.with().name("Orbit Books").build()));
         MockLogService logservice = new MockLogService();
+        UserManagementService useradmin = mock(UserManagementService.class);
 
-        BokbaseWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(bokbase , logservice);
+        BokbaseWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(bokbase , useradmin, logservice);
 
         // Create the request and response
         MockHttpServletRequest request = buildPostUrl("/publisher/remove");
@@ -602,8 +622,9 @@ class BokbaseWebApiTest extends ShiroTestBase {
         BokbaseService bokbase = mock(BokbaseService.class);
         when(bokbase.listSeries()).thenReturn(Collections.singletonList(Series.with().seriesId(seriesId).build()));
         MockLogService logservice = new MockLogService();
+        UserManagementService useradmin = mock(UserManagementService.class);
 
-        BokbaseWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(bokbase , logservice);
+        BokbaseWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(bokbase , useradmin, logservice);
 
         // Create the request and response
         MockHttpServletRequest request = buildGetUrl("/series");
@@ -628,8 +649,9 @@ class BokbaseWebApiTest extends ShiroTestBase {
         BokbaseService bokbase = mock(BokbaseService.class);
         when(bokbase.addSeries(any())).thenReturn(SeriesWithAddedSeriesId.with().series(Collections.singletonList(seriesToAdd)).addedSeriesId(seriesId).build());
         MockLogService logservice = new MockLogService();
+        UserManagementService useradmin = mock(UserManagementService.class);
 
-        BokbaseWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(bokbase , logservice);
+        BokbaseWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(bokbase , useradmin, logservice);
 
         // Create the request and response
         MockHttpServletRequest request = buildPostUrl("/series/add");
@@ -655,8 +677,9 @@ class BokbaseWebApiTest extends ShiroTestBase {
         BokbaseService bokbase = mock(BokbaseService.class);
         when(bokbase.updateSeries(any())).thenReturn(Collections.singletonList(seriesToModify));
         MockLogService logservice = new MockLogService();
+        UserManagementService useradmin = mock(UserManagementService.class);
 
-        BokbaseWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(bokbase , logservice);
+        BokbaseWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(bokbase , useradmin, logservice);
 
         // Create the request and response
         MockHttpServletRequest request = buildPostUrl("/series/update");
@@ -682,8 +705,9 @@ class BokbaseWebApiTest extends ShiroTestBase {
         BokbaseService bokbase = mock(BokbaseService.class);
         when(bokbase.removeSeries(any())).thenReturn(Collections.singletonList(Series.with().build()));
         MockLogService logservice = new MockLogService();
+        UserManagementService useradmin = mock(UserManagementService.class);
 
-        BokbaseWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(bokbase , logservice);
+        BokbaseWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(bokbase , useradmin, logservice);
 
         // Create the request and response
         MockHttpServletRequest request = buildPostUrl("/series/remove");
@@ -735,10 +759,11 @@ class BokbaseWebApiTest extends ShiroTestBase {
         return request;
     }
 
-    private BokbaseWebApi simulateDSComponentActivationAndWebWhiteboardConfiguration(BokbaseService bokbase, LogService logservice) throws Exception {
+    private BokbaseWebApi simulateDSComponentActivationAndWebWhiteboardConfiguration(BokbaseService bokbase, UserManagementService useradmin, LogService logservice) throws Exception {
         BokbaseWebApi servlet = new BokbaseWebApi();
         servlet.setLogService(logservice);
-        servlet.setSampleappService(bokbase);
+        servlet.setBokbaseService(bokbase);
+        servlet.setUseradmin(useradmin);
         servlet.activate();
         ServletConfig config = createServletConfigWithApplicationAndPackagenameForJerseyResources();
         servlet.init(config);

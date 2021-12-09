@@ -85,7 +85,7 @@ function Authors(props) {
 
 function mapStateToProps(state) {
     const {
-        loginresultat,
+        loginresult,
         authors,
         authorModified,
         authorId,
@@ -95,7 +95,7 @@ function mapStateToProps(state) {
     const text = state.displayTexts;
     return {
         text,
-        loginresultat,
+        loginresult,
         authors,
         authorModified,
         authorId: emptyStringWhenFalsy(authorId),
