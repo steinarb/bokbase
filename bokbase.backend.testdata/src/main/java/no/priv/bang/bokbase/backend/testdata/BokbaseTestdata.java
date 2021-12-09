@@ -51,7 +51,7 @@ public class BokbaseTestdata {
     }
 
     void addRolesForTestusers() {
-        Role bokbaseuser = useradmin.getRoles().stream().filter(r -> SAMPLEAPPUSER_ROLE.equals(r.getRolename())).findFirst().get(); // NOSONAR testkode
+        Role bokbaseuser = useradmin.getRoles().stream().filter(r -> BOKBASEUSER_ROLE.equals(r.getRolename())).findFirst().get(); // NOSONAR testkode
         User jad = useradmin.getUser("jad");
         useradmin.addUserRoles(UserRoles.with().user(jad).roles(Arrays.asList(bokbaseuser)).build());
     }

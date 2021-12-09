@@ -552,7 +552,7 @@ public class BokbaseServiceProvider implements BokbaseService {
     }
 
     private void addRolesIfNotpresent() {
-        String bokbaseuser = SAMPLEAPPUSER_ROLE;
+        String bokbaseuser = BOKBASEUSER_ROLE;
         List<Role> roles = useradmin.getRoles();
         Optional<Role> existingRole = roles.stream().filter(r -> bokbaseuser.equals(r.getRolename())).findFirst();
         if (!existingRole.isPresent()) {

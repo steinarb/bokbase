@@ -16,11 +16,11 @@
 package no.priv.bang.bokbase.services;
 
 public class BokbaseConstants {
-    public static final String SAMPLEAPP_JDBC_URL = "bokbase.db.jdbc.url";
-    public static final String SAMPLEAPP_JDBC_USER = "bokbase.db.jdbc.user";
-    public static final String SAMPLEAPP_JDBC_PASSWORD = "bokbase.db.jdbc.password"; // NOSONAR hard to write code to handle passwords without saying the word "password"
+    public static final String BOKBASE_JDBC_URL = "bokbase.db.jdbc.url";
+    public static final String BOKBASE_JDBC_USER = "bokbase.db.jdbc.user";
+    public static final String BOKBASE_JDBC_PASSWORD = "bokbase.db.jdbc.password"; // NOSONAR hard to write code to handle passwords without saying the word "password"
 
-    public static final String SAMPLEAPPUSER_ROLE = "bokbaseuser";
+    public static final String BOKBASEUSER_ROLE = "bokbaseuser";
 
     private BokbaseConstants() {}
 }

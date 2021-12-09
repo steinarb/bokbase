@@ -73,7 +73,7 @@ public class LoginResource {
         try {
             subject.login(token);
             String originalRequestUrl = findOriginalRequestUrl();
-            boolean authorized = subject.hasRole(SAMPLEAPPUSER_ROLE);
+            boolean authorized = subject.hasRole(BOKBASEUSER_ROLE);
             if (authorized) {
                 bokbase.lazilyCreateAccount(username);
             }
@@ -123,7 +123,7 @@ public class LoginResource {
         Subject subject = SecurityUtils.getSubject();
         String username = (String) subject.getPrincipal();
         boolean suksess = subject.isAuthenticated();
-        boolean harRoleSampleappuser = subject.hasRole(SAMPLEAPPUSER_ROLE);
+        boolean harRoleSampleappuser = subject.hasRole(BOKBASEUSER_ROLE);
         String brukerLoggetInnMelding = harRoleSampleappuser ?
             bokbase.displayText("userloggedinwithaccesses", locale) :
             bokbase.displayText("userloggedinwithoutaccesses", locale);
