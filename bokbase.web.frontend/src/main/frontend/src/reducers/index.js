@@ -9,6 +9,7 @@ import availableLocales from './availableLocalesReducer';
 import displayTexts from './displayTextsReducer';
 import errors from './errorsReducer';
 import books from './booksReducer';
+import csvdata from './csvdataReducer';
 import authors from './authorsReducer';
 import publishers from './publishersReducer';
 import series from './seriesReducer';
@@ -42,6 +43,7 @@ import seriesName from './seriesNameReducer';
 export default (history) => combineReducers({
     router: connectRouter(history),
     books,
+    csvdata,
     authors,
     publishers,
     series,
