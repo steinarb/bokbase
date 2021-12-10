@@ -11,6 +11,48 @@ To give users access to the database, add the [[https://shiro.apache.org/authori
 
 ** Installing the bokbase application
 
+Here are the instructions for how to run bokbase locally:
+ 1. Install a PostgreSQL database server locally, use e.g. an .msi installer on Windows or APT on debian
+ 2. Add a PostgreSQL user named karaf, with password karaf, either using pgadmin or from the command line:
+    #+begin_example
+      /usr/bin/sudo -u postgres createuser karaf
+    #+end_example
+ 3. Add a blank database named authservice, with owner "karaf", either using pgadmin or from the command line:
+    #+begin_example
+      /usr/bin/sudo -u postgres createdb -O karaf authservice
+    #+end_example
+ 4. Add a blank database named bokbase, with owner "karaf", either using pgadmin or from the command line:
+    #+begin_example
+      /usr/bin/sudo -u postgres createdb -O karaf bokbase
+    #+end_example
+ 5. Clone and build bokbase
+    #+begin_example
+      mkdir -p ~/git
+      cd ~/git/
+      git clone https://github.com/steinarb/bokbase.git
+      cd bokbase
+      mvn clean install
+    #+end_example
+ 6. Download and start apache karaf (see the [[https://karaf.apache.org/manual/latest/quick-start.html][karaf quick start guide]])
+ 7. From the karaf command line, install bokbase:
+    #+begin_example
+      feature:repo-add mvn:no.priv.bang.bokbase/karaf/LATEST/xml/features
+      feature:install bokbase-with-postgresql
+    #+end_example
+ 8. Open http://localhost:8181/authservice/useradmin in a web browser and log in as user admin, password admin
+ 9. Create a user for yourself with the role "bokbaseuser"
+ 10. Open http://localhost:8181/bokbase in a web browser and log with the username and password of the user created above
+ 11. Add some users and books and try exporting a CSV file
+ 12. Try importing the file into goodwyrm
+
+Running PostgreSQL on a different server and with a different username and password is possible with configuration.
+
+Installing karaf more permanently than what is done in the quick start guide (which is downloading and unpacking a tarball or a zip file, and running a command found in the unpacked directory) is also possible.
+
+** Installing test version of the bokbase application
+
+This version uses an in-memory derby dataset with an initial (small) dataset.
+
 Give the following commands to the karaf console:
 #+BEGIN_EXAMPLE
   feature:repo-add mvn:no.priv.bang.bokbase/karaf/LATEST/xml/features
