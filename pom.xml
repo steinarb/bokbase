@@ -25,18 +25,18 @@
 
     <packaging>pom</packaging>
 
-    <name>Sampleapp</name>
+    <name>Bokbase</name>
 
     <properties>
         <authservice.version>1.13.9</authservice.version>
         <snakeyaml.version>1.17</snakeyaml.version>
         <open-iconic.version>1.1.1</open-iconic.version>
-        <sonar.cpd.exclusions>**/SampleappServiceProvider.java,
-            **/SampleappTestDbLiquibaseRunner.java,
-            **/SampleappProductionDbLiquibaseRunner.java,</sonar.cpd.exclusions>
+        <sonar.cpd.exclusions>**/BokbaseServiceProvider.java,
+            **/BokbaseTestDbLiquibaseRunner.java,
+            **/BokbaseProductionDbLiquibaseRunner.java,</sonar.cpd.exclusions>
         <sonar.issue.ignore.multicriteria>e1</sonar.issue.ignore.multicriteria>
         <sonar.issue.ignore.multicriteria.e1.ruleKey>squid:S2160</sonar.issue.ignore.multicriteria.e1.ruleKey>
-        <sonar.issue.ignore.multicriteria.e1.resourceKey>**/sampleapp.services/**/*.java</sonar.issue.ignore.multicriteria.e1.resourceKey>
+        <sonar.issue.ignore.multicriteria.e1.resourceKey>**/bokbase.services/**/*.java</sonar.issue.ignore.multicriteria.e1.resourceKey>
         <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/../jacoco-coverage-report/target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
     </properties>
 
