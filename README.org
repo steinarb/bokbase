@@ -7,7 +7,7 @@ Data storage is in a PostgreSQL database and there is a simple react.js GUI to e
 To give users access to the database, add the [[https://shiro.apache.org/authorization.html#Authorization-Roles][shiro role]] bokbaseuser to the user in [[https://github.com/steinarb/authservice][authservice]].
 
 ** Development status
-[[https://travis-ci.org/steinarb/sampleapp][file:https://travis-ci.org/steinarb/bokbase.svg?branch=master]]
+[[https://travis-ci.org/steinarb/bokbase][file:https://travis-ci.org/steinarb/bokbase.svg?branch=master]]
 
 ** Installing the bokbase application
 
