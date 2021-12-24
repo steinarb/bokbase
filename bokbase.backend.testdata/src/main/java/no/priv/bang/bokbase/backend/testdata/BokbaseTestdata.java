@@ -34,7 +34,7 @@ public class BokbaseTestdata {
     private UserManagementService useradmin;
 
     @Reference
-    public void setSampleappService(BokbaseService bokbase) {
+    public void setBokbaseService(BokbaseService bokbase) {
         // Brukes bare til å bestemme rekkefølge på kjøring
         // Når denne blir kalt vet vi at authservice har
         // rollen bokbaseuser lagt til

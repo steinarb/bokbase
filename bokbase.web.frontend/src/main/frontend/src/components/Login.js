@@ -19,7 +19,7 @@ function Login(props) {
         <div className="Login">
             <header>
                 <div className="pb-2 mt-4 mb-2 border-bottom bg-light">
-                    <h1>Sampleapp login</h1>
+                    <h1>Bokbase login</h1>
                     <p id="messagebanner"></p>
                 </div>
             </header>

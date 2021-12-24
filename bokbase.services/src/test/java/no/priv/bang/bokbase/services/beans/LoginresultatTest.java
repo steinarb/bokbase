@@ -29,7 +29,7 @@ class LoginresultTest {
         boolean success = true;
         boolean authorized = true;
         String errormessage = "Feil passord";
-        String originalRequestUrl = "http://localhost:8181/sampleapp/hurtigregistrering";
+        String originalRequestUrl = "http://localhost:8181/bokbase/hurtigregistrering";
         String username = "jod";
         User user = User.with().username(username).build();
         Loginresult bean = Loginresult.with()
