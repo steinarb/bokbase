@@ -309,7 +309,7 @@ public class BokbaseServiceProvider implements BokbaseService {
 
     @Override
     public List<Author> listAuthors() {
-        List<Author> authors = new ArrayList<Author>();
+        List<Author> authors = new ArrayList<>();
         try(Connection connection = datasource.getConnection()) {
             String sql = "select * from authors";
             try(PreparedStatement statement = connection.prepareStatement(sql)) {
