@@ -115,7 +115,7 @@ public class Book extends Immutable {
     }
 
     public static Builder with(Book originalBook) {
-        Builder builder = new Builder();;
+        Builder builder = new Builder();
         builder.bookId = originalBook.bookId;
         builder.title = originalBook.title;
         builder.subtitle = originalBook.subtitle;
