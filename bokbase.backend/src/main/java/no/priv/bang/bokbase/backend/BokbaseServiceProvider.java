@@ -564,8 +564,7 @@ public class BokbaseServiceProvider implements BokbaseService {
         int accountId = results.getInt(1);
         String username = results.getString(2);
         User user = useradmin.getUser(username);
-        Account account = Account.with().accountId(accountId).user(user).build();
-        return account;
+        return Account.with().accountId(accountId).user(user).build();
     }
 
     Book unpackBook(ResultSet results) throws SQLException {
