@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import DatePicker from 'react-date-picker';
 import { emptyStringWhenFalsy } from './componentsCommon';
 import Container from './bootstrap/Container';
 import StyledLinkLeft from './bootstrap/StyledLinkLeft';
@@ -14,15 +15,15 @@ import {
     BOOK_BOOKSHELF_SELECT,
     BOOK_AUTHOR_SELECT,
     BOOK_TITLE_MODIFY,
+    BOOK_ISBN13_MODIFY,
     BOOK_SUBTITLE_MODIFY,
     BOOK_SERIES_SELECT,
     BOOK_SERIES_NUMBER_MODIFY,
     BOOK_PUBLISHER_SELECT,
-    BOOK_YEAR_PUBLISHED_MODIFY,
+    BOOK_PUBLISHED_DATE_MODIFY,
     BOOK_PAGES_MODIFY,
     BOOK_BINDING_MODIFY,
-    BOOK_YEAR_READ_MODIFY,
-    BOOK_MONTH_READ_MODIFY,
+    BOOK_FINISHED_READ_DATE_MODIFY,
     BOOK_RATING_MODIFY,
     BOOK_AVERAGE_RATING_MODIFY,
 } from '../reduxactions';
@@ -42,14 +43,14 @@ function Books(props) {
         bookAuthorId,
         bookTitle,
         bookSubtitle,
+        bookIsbn13,
         bookSeriesId,
         bookSeriesNumber,
         bookPublisherId,
-        bookYearPublished,
+        bookPublishedDate,
         bookPages,
         bookBinding,
-        bookYearRead,
-        bookMonthRead,
+        bookFinishedReadDate,
         bookRating,
         bookAverageRating,
         onBookSelect,
@@ -59,16 +60,17 @@ function Books(props) {
         onBookAuthorSelect,
         onBookTitleModify,
         onBookSubtitleModify,
+        onBookIsbn13Modify,
         onBookSerieselect,
         onBookSeriesNumberModify,
         onBookPublisherSelect,
-        onBookYearPublishedModify,
+        onBookPublishedDateModify,
         onBookPagesModify,
         onBookBindingModify,
-        onBookYearReadModify,
-        onBookMonthReadModify,
+        onBookFinishedReadDateModify,
         onBookRatingModify,
         onBookAverageRatingModify,
+        locale,
     } = props;
 
     return (
@@ -138,6 +140,12 @@ function Books(props) {
                         </FormField>
                     </FormRow>
                     <FormRow>
+                        <FormLabel htmlFor="isbn13">{text.isbn13}</FormLabel>
+                        <FormField>
+                            <input id="isbn13" className="form-control" type="text" value={bookIsbn13} onChange={onBookIsbn13Modify} />
+                        </FormField>
+                    </FormRow>
+                    <FormRow>
                         <FormLabel htmlFor="series">{text.series}</FormLabel>
                         <FormField>
                             <select id="users" className="form-control" value={bookSeriesId} onChange={onBookSerieselect}>
@@ -162,9 +170,9 @@ function Books(props) {
                         </FormField>
                     </FormRow>
                     <FormRow>
-                        <FormLabel htmlFor="yearPublished">{text.yearPublished}</FormLabel>
+                        <FormLabel htmlFor="publishedDate">{text.publishedDate}</FormLabel>
                         <FormField>
-                            <input id="yearPublished" className="form-control" type="text" value={bookYearPublished} onChange={onBookYearPublishedModify} />
+                            <DatePicker id="publishedDate" locale={locale} value={bookPublishedDate} onChange={onBookPublishedDateModify}/>
                         </FormField>
                     </FormRow>
                     <FormRow>
@@ -184,29 +192,9 @@ function Books(props) {
                         </FormField>
                     </FormRow>
                     <FormRow>
-                        <FormLabel htmlFor="yearRead">{text.yearRead}</FormLabel>
+                        <FormLabel htmlFor="finishedReadDate">{text.finishedReadDate}</FormLabel>
                         <FormField>
-                            <input id="yearRead" className="form-control" type="text" value={bookYearRead} onChange={onBookYearReadModify} />
-                        </FormField>
-                    </FormRow>
-                    <FormRow>
-                        <FormLabel htmlFor="monthRead">{text.monthRead}</FormLabel>
-                        <FormField>
-                            <select id="monthRead" className="form-control" value={bookMonthRead} onChange={onBookMonthReadModify}>
-                                <option key="monthReadNull" value=""></option>
-                                <option key="january" value="1">{text.january}</option>
-                                <option key="february" value="2">{text.february}</option>
-                                <option key="march" value="3">{text.march}</option>
-                                <option key="april" value="4">{text.april}</option>
-                                <option key="may" value="5">{text.may}</option>
-                                <option key="june" value="6">{text.june}</option>
-                                <option key="july" value="7">{text.july}</option>
-                                <option key="august" value="8">{text.august}</option>
-                                <option key="september" value="9">{text.september}</option>
-                                <option key="october" value="10">{text.october}</option>
-                                <option key="november" value="11">{text.november}</option>
-                                <option key="december" value="12">{text.december}</option>
-                            </select>
+                            <DatePicker id="finishedReadDate" locale={locale} value={bookFinishedReadDate} onChange={onBookFinishedReadDateModify}/>
                         </FormField>
                     </FormRow>
                     <FormRow>
@@ -240,16 +228,17 @@ function mapStateToProps(state) {
         bookAuthorId,
         bookTitle,
         bookSubtitle,
+        bookIsbn13,
         bookSeriesId,
         bookSeriesNumber,
         bookPublisherId,
-        bookYearPublished,
+        bookPublishedDate,
         bookPages,
         bookBinding,
-        bookYearRead,
-        bookMonthRead,
+        bookFinishedReadDate,
         bookRating,
         bookAverageRating,
+        locale,
     } = state;
     const text = state.displayTexts;
     return {
@@ -265,16 +254,17 @@ function mapStateToProps(state) {
         bookAuthorId: emptyStringWhenFalsy(bookAuthorId),
         bookTitle: emptyStringWhenFalsy(bookTitle),
         bookSubtitle: emptyStringWhenFalsy(bookSubtitle),
+        bookIsbn13: emptyStringWhenFalsy(bookIsbn13),
         bookSeriesId: emptyStringWhenFalsy(bookSeriesId),
         bookSeriesNumber: emptyStringWhenFalsy(bookSeriesNumber),
         bookPublisherId: emptyStringWhenFalsy(bookPublisherId),
-        bookYearPublished: emptyStringWhenFalsy(bookYearPublished),
+        bookPublishedDate,
         bookPages: emptyStringWhenFalsy(bookPages),
         bookBinding: emptyStringWhenFalsy(bookBinding),
-        bookYearRead: emptyStringWhenFalsy(bookYearRead),
-        bookMonthRead: emptyStringWhenFalsy(bookMonthRead),
+        bookFinishedReadDate,
         bookRating: emptyStringWhenFalsy(bookRating),
         bookAverageRating: emptyStringWhenFalsy(bookAverageRating),
+        locale: locale.replace('_', '-'),
     };
 }
 
@@ -287,14 +277,14 @@ function mapDispatchToProps(dispatch) {
         onBookAuthorSelect: (e) => dispatch(BOOK_AUTHOR_SELECT(e.target.value)),
         onBookTitleModify: (e) => dispatch(BOOK_TITLE_MODIFY(e.target.value)),
         onBookSubtitleModify: (e) => dispatch(BOOK_SUBTITLE_MODIFY(e.target.value)),
+        onBookIsbn13Modify: (e) => dispatch(BOOK_ISBN13_MODIFY(e.target.value)),
         onBookSerieselect: (e) => dispatch(BOOK_SERIES_SELECT(e.target.value)),
         onBookSeriesNumberModify: (e) => dispatch(BOOK_SERIES_NUMBER_MODIFY(e.target.value)),
         onBookPublisherSelect: (e) => dispatch(BOOK_PUBLISHER_SELECT(e.target.value)),
-        onBookYearPublishedModify:  (e) => dispatch(BOOK_YEAR_PUBLISHED_MODIFY(e.target.value)),
+        onBookPublishedDateModify:  (value) => dispatch(BOOK_PUBLISHED_DATE_MODIFY(value)),
         onBookPagesModify: (e) => dispatch(BOOK_PAGES_MODIFY(e.target.value)),
         onBookBindingModify: (e) => dispatch(BOOK_BINDING_MODIFY(e.target.value)),
-        onBookYearReadModify: (e) => dispatch(BOOK_YEAR_READ_MODIFY(e.target.value)),
-        onBookMonthReadModify: (e) => dispatch(BOOK_MONTH_READ_MODIFY(e.target.value)),
+        onBookFinishedReadDateModify: (value) => dispatch(BOOK_FINISHED_READ_DATE_MODIFY(value)),
         onBookRatingModify: (e) => dispatch(BOOK_RATING_MODIFY(e.target.value)),
         onBookAverageRatingModify: (e) => dispatch(BOOK_AVERAGE_RATING_MODIFY(e.target.value)),
     };

@@ -18,15 +18,15 @@ import bookModified from './bookModifiedReducer';
 import bookBookshelf from './bookBookshelfReducer';
 import bookTitle from './bookTitleReducer';
 import bookSubtitle from './bookSubtitleReducer';
+import bookIsbn13 from './bookIsbn13Reducer';
 import bookAuthorId from './bookAuthorIdReducer';
 import bookSeriesId from './bookSeriesIdReducer';
 import bookSeriesNumber from './bookSeriesNumberReducer';
 import bookPublisherId from './bookPublisherIdReducer';
-import bookYearPublished from './bookYearPublishedReducer';
+import bookPublishedDate from './bookPublishedDateReducer';
 import bookPages from './bookPagesReducer';
 import bookBinding from './bookBindingReducer';
-import bookYearRead from './bookYearReadReducer';
-import bookMonthRead from './bookMonthReadReducer';
+import bookFinishedReadDate from './bookFinishedReadDateReducer';
 import bookRating from './bookRatingReducer';
 import bookAverageRating from './bookAverageRatingReducer';
 import authorId from './authorIdReducer';
@@ -53,14 +53,14 @@ export default (history) => combineReducers({
     bookAuthorId,
     bookTitle,
     bookSubtitle,
+    bookIsbn13,
     bookSeriesId,
     bookSeriesNumber,
     bookPublisherId,
-    bookYearPublished,
+    bookPublishedDate,
     bookPages,
     bookBinding,
-    bookYearRead,
-    bookMonthRead,
+    bookFinishedReadDate,
     bookRating,
     bookAverageRating,
     authorId,

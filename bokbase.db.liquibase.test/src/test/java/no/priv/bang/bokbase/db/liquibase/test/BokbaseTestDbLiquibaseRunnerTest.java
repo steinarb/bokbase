@@ -45,6 +45,8 @@ class BokbaseTestDbLiquibaseRunnerTest {
         runner.prepare(datasource);
         assertAccounts(datasource);
         assertBooks(datasource);
+        assertBookRatings(datasource);
+        assertBooksWithRatings(datasource, "jad");
     }
 
     private void assertAccounts(DataSource datasource) throws Exception {
@@ -66,6 +68,35 @@ class BokbaseTestDbLiquibaseRunnerTest {
         int resultcount = 0;
         try (Connection connection = datasource.getConnection()) {
             try(PreparedStatement statement = connection.prepareStatement("select * from books")) {
+                try (ResultSet results = statement.executeQuery()) {
+                    while (results.next()) {
+                        ++resultcount;
+                    }
+                }
+            }
+        }
+        assertThat(resultcount).isPositive();
+    }
+
+    private void assertBookRatings(DataSource datasource) throws Exception {
+        int resultcount = 0;
+        try (Connection connection = datasource.getConnection()) {
+            try(PreparedStatement statement = connection.prepareStatement("select * from book_ratings")) {
+                try (ResultSet results = statement.executeQuery()) {
+                    while (results.next()) {
+                        ++resultcount;
+                    }
+                }
+            }
+        }
+        assertThat(resultcount).isPositive();
+    }
+
+    private void assertBooksWithRatings(DataSource datasource, String username) throws Exception {
+        int resultcount = 0;
+        try (Connection connection = datasource.getConnection()) {
+            try(PreparedStatement statement = connection.prepareStatement("select * from books b left join series e on b.series_id=e.series_id left join authors a on b.author_id=a.author_id left join publishers p on p.publisher_id=b.publisher_id join bookshelves s on b.book_id=s.book_id join bokbase_accounts c on s.account_id=c.account_id join book_ratings r on b.book_id=r.book_id and c.account_id=r.account_id where c.username=?")) {
+                statement.setString(1, username);
                 try (ResultSet results = statement.executeQuery()) {
                     while (results.next()) {
                         ++resultcount;

@@ -18,6 +18,8 @@ package no.priv.bang.bokbase.services.beans;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.time.LocalDate;
+
 import org.junit.jupiter.api.Test;
 
 class BookTest {
@@ -38,10 +40,10 @@ class BookTest {
         String publisherName = "Baen Books";
         Binding binding = Binding.Hardcover;
         Integer pages = 414;
-        Integer yearPublished = 2013;
-        Integer monthRead = 7;
-        Integer yearRead = 2013;
+        LocalDate publishedDate = LocalDate.of(2012, 11, 1);
+        LocalDate finishedReadDate = LocalDate.of(2013, 7, 1);
         Bookshelf bookshelf = Bookshelf.read;
+        String isbn13 = "9781451639155";
         Book bean = Book.with()
             .bookId(bookId)
             .title(title)
@@ -57,10 +59,10 @@ class BookTest {
             .publisherName(publisherName)
             .binding(binding)
             .pages(pages)
-            .yearPublished(yearPublished)
-            .monthRead(monthRead)
-            .yearRead(yearRead)
+            .publishedDate(publishedDate)
+            .finishedReadDate(finishedReadDate)
             .bookshelf(bookshelf)
+            .isbn13(isbn13)
             .build();
         assertNotNull(bean);
         assertEquals(bookId, bean.getBookId());
@@ -77,10 +79,10 @@ class BookTest {
         assertEquals(publisherName, bean.getPublisherName());
         assertEquals(binding, bean.getBinding());
         assertEquals(pages, bean.getPages());
-        assertEquals(yearPublished, bean.getYearPublished());
-        assertEquals(monthRead, bean.getMonthRead());
-        assertEquals(yearRead, bean.getYearRead());
+        assertEquals(publishedDate, bean.getPublishedDate());
+        assertEquals(finishedReadDate, bean.getFinishedReadDate());
         assertEquals(bookshelf, bean.getBookshelf());
+        assertEquals(isbn13, bean.getIsbn13());
         assertThat(bean.toString()).contains(title).contains(authorName);
     }
 
@@ -100,10 +102,10 @@ class BookTest {
             .publisherName("Baen Books")
             .binding(Binding.Hardcover)
             .pages(414)
-            .yearPublished(2013)
-            .monthRead(7)
-            .yearRead(2013)
+            .publishedDate(LocalDate.of(2012, 11, 1))
+            .finishedReadDate(LocalDate.of(2013, 7, 1))
             .bookshelf(Bookshelf.read)
+            .isbn13("9781451639155")
             .build();
         Book copyOfBean = Book.with(bean).build();
         assertThat(copyOfBean).usingRecursiveComparison().isEqualTo(bean);

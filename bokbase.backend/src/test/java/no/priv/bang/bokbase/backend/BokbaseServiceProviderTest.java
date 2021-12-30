@@ -19,6 +19,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -244,11 +245,10 @@ class BokbaseServiceProviderTest {
             .title("Memory")
             .authorId(1L)
             .publisherId(1L)
-            .yearPublished(1997)
+            .publishedDate(LocalDate.of(1996, 10, 1))
             .binding(Binding.Paperback)
             .pages(419)
-            .yearRead(1997)
-            .monthRead(8)
+            .finishedReadDate(LocalDate.of(1997, 8, 1))
             .seriesId(1L)
             .seriesNumber(10.0)
             .averageRating(5)
@@ -298,11 +298,10 @@ class BokbaseServiceProviderTest {
             .orElse(null);
         Book modifiedBook = Book.with(originalBook)
             .title("Barrayar")
-            .yearPublished(1991)
+            .publishedDate(LocalDate.of(1991, 07, 01))
             .binding(Binding.Hardcover)
             .pages(386)
-            .yearRead(1992)
-            .monthRead(7)
+            .finishedReadDate(LocalDate.of(1992, 7, 1))
             .seriesNumber(2.0)
             .averageRating(3)
             .rating(4)

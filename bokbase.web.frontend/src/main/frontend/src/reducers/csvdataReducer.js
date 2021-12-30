@@ -5,6 +5,7 @@ import {
     BOOK_REMOVE_RECEIVE,
     BOOK_ADD_RECEIVE,
 } from '../reduxactions';
+import { formatLocalDate } from './reducerCommon';
 
 const csvdataReducer = createReducer([], {
     [BOOKS_RECEIVE]: (state, action) => transformToCsv(action.payload),
@@ -15,57 +16,34 @@ const csvdataReducer = createReducer([], {
 
 export default csvdataReducer;
 
-const month = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December'
-];
-
 function transformToCsv(books) {
     const rowsOfArrays = books.map(b => {
+        const dateAdded = formatLocalDate(b.publishedDate);
+        const dateFinished = formatLocalDate(b.finishedReadDate);
         return [
+            b.bookId,
             b.title,
-            b.subtitle,
-            b.series,
             b.authorName,
+            b.isbn13,
             b.rating,
-            b.averageRating,
-            b.publisherName,
-            b.binding,
-            b.pages,
-            b.yearPublished,
-            month[b.monthRead - 1],
-            b.monthRead,
-            b.yearRead,
             b.bookshelf,
+            b.review,
+            dateAdded,
+            dateFinished,
         ];
     });
 
     return [
         [
+            'id',
             'title',
-            'subtitle',
-            'series',
             'author',
-            'my_rating',
-            'avg_rating',
-            'publisher',
-            'binding',
-            'pages',
-            'year_published',
-            'month',
-            'month_read_num',
-            'year_read',
-            'bookshelf'
+            'ISBN13',
+            'rating',
+            'shelf',
+            'review',
+            'added',
+            'finished',
         ],
         ...rowsOfArrays
     ];

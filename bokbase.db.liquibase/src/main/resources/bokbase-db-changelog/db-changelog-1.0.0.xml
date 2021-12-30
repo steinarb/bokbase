@@ -203,4 +203,36 @@
         </createIndex>
     </changeSet>
 
+    <changeSet author="sb" id="bokbase-1.0.0-change_published_and_read_to_dates">
+        <preConditions onFail="CONTINUE" >
+            <tableExists tableName="books" />
+            <tableExists tableName="book_ratings" />
+        </preConditions>
+
+        <addColumn tableName="books">
+            <column name="published_date" type="date" />
+        </addColumn>
+
+        <dropColumn tableName="books" columnName="year_published" />
+
+        <addColumn tableName="book_ratings">
+            <column name="finished_read_date" type="date" />
+        </addColumn>
+
+        <dropColumn tableName="book_ratings" columnName="month_read" />
+        <dropColumn tableName="book_ratings" columnName="year_read" />
+
+    </changeSet>
+
+    <changeSet author="sb" id="bokbase-1.0.0-add_isbn13">
+        <preConditions onFail="CONTINUE" >
+            <tableExists tableName="books" />
+        </preConditions>
+
+        <addColumn tableName="books">
+            <column name="isbn13" type="varchar(13)" />
+        </addColumn>
+
+    </changeSet>
+
 </databaseChangeLog>

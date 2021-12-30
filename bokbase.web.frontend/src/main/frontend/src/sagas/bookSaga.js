@@ -30,6 +30,7 @@ function* collectBook() {
     const bookId = yield select(state => state.bookId);
     const title = yield select(state => state.bookTitle);
     const subtitle = yield select(state => state.bookSubtitle);
+    const isbn13 = yield select(state => state.bookIsbn13);
     const seriesId = yield select(state => state.bookSeriesId);
     const seriesNumber = yield select(state => state.bookSeriesNumber);
     const authorId = yield select(state => state.bookAuthorId);
@@ -38,14 +39,14 @@ function* collectBook() {
     const publisherId = yield select(state => state.bookPublisherId);
     const binding = yield select(state => state.bookBinding);
     const pages = yield select(state => state.bookPages);
-    const yearPublished = yield select(state => state.bookYearPublished);
-    const monthRead = yield select(state => state.bookMonthRead);
-    const yearRead = yield select(state => state.bookYearRead);
+    const publishedDate = yield select(state => state.bookPublishedDate);
+    const finishedReadDate = yield select(state => state.bookFinishedReadDate);
     const bookshelf = yield select(state => state.bookBookshelf);
     const book = {
         bookId,
         title,
         subtitle,
+        isbn13,
         seriesId,
         seriesNumber,
         authorId,
@@ -54,9 +55,8 @@ function* collectBook() {
         publisherId,
         binding,
         pages,
-        yearPublished,
-        monthRead,
-        yearRead,
+        publishedDate,
+        finishedReadDate,
         bookshelf,
     };
 

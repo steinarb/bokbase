@@ -15,6 +15,8 @@
  */
 package no.priv.bang.bokbase.services.beans;
 
+import java.time.LocalDate;
+
 import no.priv.bang.beans.immutable.Immutable;
 
 public class Book extends Immutable {
@@ -32,10 +34,10 @@ public class Book extends Immutable {
     private String publisherName;
     private Binding binding;
     private Integer pages;
-    private Integer yearPublished;
-    private Integer monthRead;
-    private Integer yearRead;
+    private LocalDate publishedDate;
+    private LocalDate finishedReadDate;
     private Bookshelf bookshelf;
+    private String isbn13;
     private Book() {}
 
     public long getBookId() {
@@ -94,20 +96,20 @@ public class Book extends Immutable {
         return pages;
     }
 
-    public Integer getYearPublished() {
-        return yearPublished;
+    public LocalDate getPublishedDate() {
+        return publishedDate;
     }
 
-    public Integer getMonthRead() {
-        return monthRead;
-    }
-
-    public Integer getYearRead() {
-        return yearRead;
+    public LocalDate getFinishedReadDate() {
+        return finishedReadDate;
     }
 
     public Bookshelf getBookshelf() {
         return bookshelf;
+    }
+
+    public String getIsbn13() {
+        return isbn13;
     }
 
     public static Builder with() {
@@ -130,10 +132,10 @@ public class Book extends Immutable {
         builder.publisherName = originalBook.publisherName;
         builder.binding = originalBook.binding;
         builder.pages = originalBook.pages;
-        builder.yearPublished = originalBook.yearPublished;
-        builder.monthRead = originalBook.monthRead;
-        builder.yearRead = originalBook.yearRead;
+        builder.publishedDate = originalBook.publishedDate;
+        builder.finishedReadDate = originalBook.finishedReadDate;
         builder.bookshelf = originalBook.bookshelf;
+        builder.isbn13 = originalBook.isbn13;
         return builder;
     }
 
@@ -152,10 +154,10 @@ public class Book extends Immutable {
         private String publisherName;
         private Binding binding;
         private Integer pages;
-        private Integer yearPublished;
-        private Integer monthRead;
-        private Integer yearRead;
+        private LocalDate publishedDate;
+        private LocalDate finishedReadDate;
         private Bookshelf bookshelf;
+        private String isbn13;
         private Builder() {}
 
         public Book build() {
@@ -174,10 +176,10 @@ public class Book extends Immutable {
             book.publisherName = publisherName;
             book.binding = binding;
             book.pages = pages;
-            book.yearPublished = yearPublished;
-            book.monthRead = monthRead;
-            book.yearRead = yearRead;
+            book.publishedDate = publishedDate;
+            book.finishedReadDate = finishedReadDate;
             book.bookshelf = bookshelf;
+            book.isbn13 = isbn13;
             return book;
         }
 
@@ -251,18 +253,13 @@ public class Book extends Immutable {
             return this;
         }
 
-        public Builder yearPublished(Integer yearPublished) {
-            this.yearPublished = yearPublished;
+        public Builder publishedDate(LocalDate publishedDate) {
+            this.publishedDate = publishedDate;
             return this;
         }
 
-        public Builder monthRead(Integer monthRead) {
-            this.monthRead = monthRead;
-            return this;
-        }
-
-        public Builder yearRead(Integer yearRead) {
-            this.yearRead = yearRead;
+        public Builder finishedReadDate(LocalDate finishedReadDate) {
+            this.finishedReadDate = finishedReadDate;
             return this;
         }
 
@@ -271,16 +268,21 @@ public class Book extends Immutable {
             return this;
         }
 
+        public Builder isbn13(String isbn13) {
+            this.isbn13 = isbn13;
+            return this;
+        }
+
     }
 
     @Override
     public String toString() {
         return "Book [bookId=" + bookId + ", title=" + title + ", subtitle=" + subtitle + ", seriesId=" + seriesId
-            + ", series=" + series + ", seriesNumber=" + seriesNumber + ", authorId=" + authorId + ", authorName="
-            + authorName + ", rating=" + rating + ", averageRating=" + averageRating + ", publisherId="
-            + publisherId + ", publisherName=" + publisherName + ", binding=" + binding + ", pages=" + pages
-            + ", yearPublished=" + yearPublished + ", monthRead=" + monthRead + ", yearRead=" + yearRead
-            + ", bookshelf=" + bookshelf + "]";
+                + ", series=" + series + ", seriesNumber=" + seriesNumber + ", authorId=" + authorId + ", authorName="
+                + authorName + ", rating=" + rating + ", averageRating=" + averageRating + ", publisherId="
+                + publisherId + ", publisherName=" + publisherName + ", binding=" + binding + ", pages=" + pages
+                + ", publishedDate=" + publishedDate + ", finishedReadDate=" + finishedReadDate + ", bookshelf="
+                + bookshelf + ", isbn13=" + isbn13 + "]";
     }
 
 }

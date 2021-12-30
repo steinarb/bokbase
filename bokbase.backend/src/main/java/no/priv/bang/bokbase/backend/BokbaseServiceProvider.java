@@ -17,11 +17,13 @@ package no.priv.bang.bokbase.backend;
 
 import static no.priv.bang.bokbase.services.BokbaseConstants.*;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
@@ -184,7 +186,7 @@ public class BokbaseServiceProvider implements BokbaseService {
     public BooksWithAddedBookId addBook(String username, Book book) {
         Long bookId = null;
         try(Connection connection = datasource.getConnection()) {
-            String booksInsert = "insert into books (book_title, book_subtitle, series_id, series_number, author_id, average_rating, publisher_id, binding, pages, year_published) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String booksInsert = "insert into books (book_title, book_subtitle, series_id, series_number, author_id, average_rating, publisher_id, binding, pages, published_date, isbn13) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             try(PreparedStatement statement = connection.prepareStatement(booksInsert, Statement.RETURN_GENERATED_KEYS)) {
                 statement.setString(1, book.getTitle());
                 statement.setString(2, book.getSubtitle());
@@ -195,7 +197,8 @@ public class BokbaseServiceProvider implements BokbaseService {
                 setLongOrNull(statement, 7, book.getPublisherId());
                 statement.setString(8, book.getBinding() != null ? book.getBinding().toString() : null);
                 setIntOrNull(statement, 9, book.getPages());
-                setIntOrNull(statement, 10, book.getYearPublished());
+                setDateOrNull(statement, 10, book.getPublishedDate());
+                statement.setString(11, book.getIsbn13());
                 statement.executeUpdate();
 
                 try (ResultSet keys = statement.getGeneratedKeys()) {
@@ -214,13 +217,12 @@ public class BokbaseServiceProvider implements BokbaseService {
                 statement.executeUpdate();
             }
 
-            String ratingsInsert = "insert into book_ratings (account_id, book_id, rating, month_read, year_read) values (?, ?, ?, ?, ?)";
+            String ratingsInsert = "insert into book_ratings (account_id, book_id, rating, finished_read_date) values (?, ?, ?, ?)";
             try(PreparedStatement statement = connection.prepareStatement(ratingsInsert)) {
                 statement.setLong(1, accountId);
                 statement.setLong(2, bookId);
                 setIntOrNull(statement, 3, book.getRating());
-                setIntOrNull(statement, 4, book.getMonthRead());
-                setIntOrNull(statement, 5, book.getYearRead());
+                setDateOrNull(statement, 4, book.getFinishedReadDate());
                 statement.executeUpdate();
             }
         } catch (SQLException e) {
@@ -236,7 +238,7 @@ public class BokbaseServiceProvider implements BokbaseService {
     @Override
     public List<Book> updateBook(String username, Book book) {
         try(Connection connection = datasource.getConnection()) {
-            String booksInsert = "update books set book_title=?, book_subtitle=?, series_id=?, series_number=?, author_id=?, average_rating=?, publisher_id=?, binding=?, pages=?, year_published=? where book_id=?";
+            String booksInsert = "update books set book_title=?, book_subtitle=?, series_id=?, series_number=?, author_id=?, average_rating=?, publisher_id=?, binding=?, pages=?, published_date=?, isbn13=? where book_id=?";
             try(PreparedStatement statement = connection.prepareStatement(booksInsert)) {
                 statement.setString(1, book.getTitle());
                 statement.setString(2, book.getSubtitle());
@@ -247,8 +249,9 @@ public class BokbaseServiceProvider implements BokbaseService {
                 setLongOrNull(statement, 7, book.getPublisherId());
                 statement.setString(8, book.getBinding() != null ? book.getBinding().toString() : null);
                 setIntOrNull(statement, 9, book.getPages());
-                setIntOrNull(statement, 10, book.getYearPublished());
-                setLongOrNull(statement, 11, book.getBookId());
+                setDateOrNull(statement, 10, book.getPublishedDate());
+                statement.setString(11, book.getIsbn13());
+                setLongOrNull(statement, 12, book.getBookId());
                 statement.executeUpdate();
             }
 
@@ -261,13 +264,12 @@ public class BokbaseServiceProvider implements BokbaseService {
                 statement.executeUpdate();
             }
 
-            String ratingsInsert = "update book_ratings set rating=?, month_read=?, year_read=? where book_id=? and account_id=?";
+            String ratingsInsert = "update book_ratings set rating=?, finished_read_date=? where book_id=? and account_id=?";
             try(PreparedStatement statement = connection.prepareStatement(ratingsInsert)) {
                 setIntOrNull(statement, 1, book.getRating());
-                setIntOrNull(statement, 2, book.getMonthRead());
-                setIntOrNull(statement, 3, book.getYearRead());
-                setLongOrNull(statement, 4, book.getBookId());
-                setLongOrNull(statement, 5, accountId);
+                setDateOrNull(statement, 2, book.getFinishedReadDate());
+                setLongOrNull(statement, 3, book.getBookId());
+                setLongOrNull(statement, 4, accountId);
                 statement.executeUpdate();
             }
         } catch (SQLException e) {
@@ -584,10 +586,10 @@ public class BokbaseServiceProvider implements BokbaseService {
             .publisherName(results.getString("publisher_name"))
             .binding(binding != null ? Binding.valueOf(binding) : null)
             .pages(getNullableInteger(results, "pages"))
-            .yearPublished(getNullableInteger(results, "year_published"))
-            .monthRead(getNullableInteger(results, "month_read"))
-            .yearRead(getNullableInteger(results, "year_read"))
+            .publishedDate(getNullableDate(results, "published_date"))
+            .finishedReadDate(getNullableDate(results, "finished_read_date"))
             .bookshelf(Bookshelf.fromValue(results.getString("bookshelf")))
+            .isbn13(results.getString("isbn13"))
             .build();
     }
 
@@ -637,6 +639,14 @@ public class BokbaseServiceProvider implements BokbaseService {
         }
     }
 
+    private void setDateOrNull(PreparedStatement statement, int index, LocalDate value) throws SQLException {
+        if (value == null) {
+            statement.setNull(index, Types.DATE);
+        } else {
+            statement.setDate(index, Date.valueOf(value));
+        }
+    }
+
     private Integer getNullableInteger(ResultSet results, String column) throws SQLException {
         int value = results.getInt(column);
         if (results.wasNull()) {
@@ -662,6 +672,15 @@ public class BokbaseServiceProvider implements BokbaseService {
         }
 
         return value;
+    }
+
+    private LocalDate getNullableDate(ResultSet results, String column) throws SQLException {
+        Date value = results.getDate(column);
+        if (results.wasNull()) {
+            return null;
+        }
+
+        return value.toLocalDate();
     }
 
     String getAuthorName(ResultSet results) throws SQLException {

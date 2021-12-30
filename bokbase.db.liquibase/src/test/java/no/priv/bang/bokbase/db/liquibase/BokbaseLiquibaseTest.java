@@ -18,8 +18,10 @@ package no.priv.bang.bokbase.db.liquibase;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.time.LocalDate;
 import java.util.Properties;
 
 import javax.sql.DataSource;
@@ -109,11 +111,11 @@ class BokbaseLiquibaseTest {
     }
 
     private void addBooks(Connection connection) throws Exception {
-        bookid1 = addBook(connection, "Lord Vorpatrils Alliance", "A romance", authorid1, seriesid1, 14.0, 4, publisherid1, "Hardcover", 413, 2013);
+        bookid1 = addBook(connection, "Lord Vorpatrils Alliance", "A romance", authorid1, seriesid1, 14.0, 4, publisherid1, "Hardcover", 413, LocalDate.of(2012, 11, 1));
     }
 
     private void assertBooks(Connection connection) throws Exception {
-        assertBook(connection, bookid1, "Lord Vorpatrils Alliance", "A romance", authorid1, seriesid1, 14.0, 4, publisherid1, "Hardcover", 413, 2013);
+        assertBook(connection, bookid1, "Lord Vorpatrils Alliance", "A romance", authorid1, seriesid1, 14.0, 4, publisherid1, "Hardcover", 413, LocalDate.of(2012, 11, 1));
     }
 
     private void addBookshelves(Connection connection) throws Exception {
@@ -270,8 +272,8 @@ class BokbaseLiquibaseTest {
         }
     }
 
-    private int addBook(Connection connection, String title, String subtitle, int authorid, int seriesid, Double seriesNumber, int averageRating, int publisherid, String binding, int pages, int yearPublished) throws Exception {
-        String sql = "insert into books (book_title, book_subtitle, series_id, series_number, author_id, average_rating, publisher_id, binding, pages, year_published) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    private int addBook(Connection connection, String title, String subtitle, int authorid, int seriesid, Double seriesNumber, int averageRating, int publisherid, String binding, int pages, LocalDate publishedDate) throws Exception {
+        String sql = "insert into books (book_title, book_subtitle, series_id, series_number, author_id, average_rating, publisher_id, binding, pages, published_date) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try(PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, title);
             statement.setString(2, subtitle);
@@ -282,7 +284,7 @@ class BokbaseLiquibaseTest {
             statement.setLong(7, publisherid);
             statement.setString(8, binding);
             statement.setInt(9, pages);
-            statement.setInt(10, yearPublished);
+            statement.setDate(10, Date.valueOf(publishedDate));
             statement.executeUpdate();
         }
 
@@ -303,7 +305,7 @@ class BokbaseLiquibaseTest {
         return -1;
     }
 
-    private void assertBook(Connection connection, int bookid, String title, String subtitle, int authorid, int seriesid, Double seriesNumber, int averageRating, int publisherid, String binding, int pages, int yearPublished) throws Exception {
+    private void assertBook(Connection connection, int bookid, String title, String subtitle, int authorid, int seriesid, Double seriesNumber, int averageRating, int publisherid, String binding, int pages, LocalDate publishedDate) throws Exception {
         String sql = "select * from books where book_id=?";
         try(PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, bookid);
@@ -319,7 +321,7 @@ class BokbaseLiquibaseTest {
                     assertEquals(publisherid, results.getLong("publisher_id"));
                     assertEquals(binding, results.getString("binding"));
                     assertEquals(pages, results.getInt("pages"));
-                    assertEquals(yearPublished, results.getInt("year_published"));
+                    assertEquals(publishedDate, results.getDate("published_date").toLocalDate());
                 }
             }
         }
