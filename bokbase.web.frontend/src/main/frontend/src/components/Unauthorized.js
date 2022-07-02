@@ -1,14 +1,14 @@
 import React from 'react';
 import { Redirect } from 'react-router';
-import { connect } from 'react-redux';
-import {
-    LOGOUT_REQUEST,
-} from '../reduxactions';
+import { useSelector, useDispatch } from 'react-redux';
+import { LOGOUT_REQUEST } from '../reduxactions';
 import Container from './bootstrap/Container';
 
 
-function Unauthorized(props) {
-    const { loginresult, text, onLogout } = props;
+export default function Unauthorized() {
+    const loginresult = useSelector(state => state.loginresult);
+    const text = useSelector(state => state.displayTexts);
+    const dispatch = useDispatch();
     const user = (loginresult || {}).user || {};
     const username = user;
     if (!loginresult.success) {
@@ -29,7 +29,7 @@ function Unauthorized(props) {
                     <div className="form-group row">
                         <div className="col-5"/>
                         <div className="col-7">
-                            <button className="btn btn-primary" onClick={onLogout}>{text.logout}</button>
+                            <button className="btn btn-primary" onClick={() => dispatch(LOGOUT_REQUEST())}>{text.logout}</button>
                         </div>
                     </div>
                 </form>
@@ -37,20 +37,3 @@ function Unauthorized(props) {
         </div>
     );
 }
-
-const mapStateToProps = state => {
-    const { loginresult } = state;
-    const text = state.displayTexts;
-    return {
-        loginresult,
-        text,
-    };
-};
-
-const mapDispatchToProps = dispatch => {
-    return {
-        onLogout: () => dispatch(LOGOUT_REQUEST()),
-    };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Unauthorized);

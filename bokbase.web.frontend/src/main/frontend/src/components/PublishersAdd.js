@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { emptyStringWhenFalsy } from './componentsCommon';
 import Container from './bootstrap/Container';
 import StyledLinkLeft from './bootstrap/StyledLinkLeft';
@@ -14,15 +14,11 @@ import {
 import Locale from './Locale';
 
 
-function PublishersAdd(props) {
-    const {
-        text,
-        publisherModified,
-        publisherName,
-        onAddClicked,
-        onCancelClicked,
-        onPublisherNameModify,
-    } = props;
+export default function PublishersAdd() {
+    const text = useSelector(state => state.displayTexts);
+    const publisherModified = useSelector(state => state.publisherModified);
+    const publisherName = useSelector(state => emptyStringWhenFalsy(state.publisherName));
+    const dispatch = useDispatch();
 
     return (
         <div>
@@ -35,10 +31,10 @@ function PublishersAdd(props) {
                 <div className="row">&nbsp;</div>
                 <div className="row text-center">
                     <div className="col-4">
-                        <button type="button" className="btn btn-primary" onClick={onAddClicked} disabled={!publisherModified}>{text.savePublisher}</button>
+                        <button type="button" className="btn btn-primary" onClick={() => dispatch(SAVE_ADD_PUBLISHER_BUTTON_CLICKED())} disabled={!publisherModified}>{text.savePublisher}</button>
                     </div>
                     <div className="col-4">
-                        <button type="button" className="btn btn-primary" onClick={onCancelClicked}>{text.cancel}</button>
+                        <button type="button" className="btn btn-primary" onClick={() => dispatch(CANCEL_ADD_PUBLISHER_BUTTON_CLICKED())}>{text.cancel}</button>
                     </div>
                 </div>
             </Container>
@@ -48,7 +44,7 @@ function PublishersAdd(props) {
                     <FormRow>
                         <FormLabel htmlFor="name">{text.publisherName}</FormLabel>
                         <FormField>
-                            <input id="name" className="form-control" type="text" value={publisherName} onChange={onPublisherNameModify} />
+                            <input id="name" className="form-control" type="text" value={publisherName} onChange={e => dispatch(PUBLISHER_NAME_MODIFY(e.target.value))} />
                         </FormField>
                     </FormRow>
                 </Container>
@@ -56,28 +52,3 @@ function PublishersAdd(props) {
         </div>
     );
 }
-
-function mapStateToProps(state) {
-    const {
-        loginresult,
-        publisherModified,
-        publisherName,
-    } = state;
-    const text = state.displayTexts;
-    return {
-        text,
-        loginresult,
-        publisherModified,
-        publisherName: emptyStringWhenFalsy(publisherName),
-    };
-}
-
-function mapDispatchToProps(dispatch) {
-    return {
-        onAddClicked: () => dispatch(SAVE_ADD_PUBLISHER_BUTTON_CLICKED()),
-        onCancelClicked: () => dispatch(CANCEL_ADD_PUBLISHER_BUTTON_CLICKED()),
-        onPublisherNameModify: (e) => dispatch(PUBLISHER_NAME_MODIFY(e.target.value)),
-    };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(PublishersAdd);

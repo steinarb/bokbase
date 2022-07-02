@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { emptyStringWhenFalsy } from './componentsCommon';
 import Container from './bootstrap/Container';
@@ -16,18 +16,13 @@ import {
 import Locale from './Locale';
 
 
-function Publishers(props) {
-    const {
-        text,
-        publishers,
-        publisherModified,
-        publisherId,
-        publisherName,
-        onPublisherSelect,
-        onPublisherAdd,
-        onPublisherRemove,
-        onPublisherNameModify,
-    } = props;
+export default function Publishers() {
+    const text = useSelector(state => state.displayTexts);
+    const publishers = useSelector(state => state.publishers);
+    const publisherModified = useSelector(state => state.publisherModified);
+    const publisherId = useSelector(state => emptyStringWhenFalsy(state.publisherId));
+    const publisherName = useSelector(state => emptyStringWhenFalsy(state.publisherName));
+    const dispatch = useDispatch();
 
     return (
         <div>
@@ -40,10 +35,10 @@ function Publishers(props) {
                 <div className="row">&nbsp;</div>
                 <div className="row text-center">
                     <div className="col-4">
-                        <button type="button" disabled={!publisherModified} className="btn btn-primary" onClick={onPublisherAdd}>{text.savePublisher}</button>
+                        <button type="button" disabled={!publisherModified} className="btn btn-primary" onClick={() => dispatch(SAVE_PUBLISHER_BUTTON_CLICKED())}>{text.savePublisher}</button>
                     </div>
                     <div className="col-4">
-                        <button type="button" className="btn btn-primary" onClick={onPublisherRemove}>{text.removePublisher}</button>
+                        <button type="button" className="btn btn-primary" onClick={() => dispatch(REMOVE_PUBLISHER_BUTTON_CLICKED())}>{text.removePublisher}</button>
                     </div>
                     <div className="col-4">
                         <Link className="btn btn-primary" to="/publishers/add">{text.addPublisher}</Link>
@@ -56,7 +51,7 @@ function Publishers(props) {
                     <FormRow>
                         <FormLabel htmlFor="users">{text.selectPublisher}</FormLabel>
                         <FormField>
-                            <select id="users" className="form-control" value={publisherId} onChange={onPublisherSelect}>
+                            <select id="users" className="form-control" value={publisherId} onChange={e => dispatch(SELECT_PUBLISHER(e.target.value))}>
                                 <option key="publisherNull" value=""></option>
                                 {publishers.map((val) => <option key={'publisher' + val.publisherId} value={val.publisherId}>{val.name}</option>)}
                             </select>
@@ -65,7 +60,7 @@ function Publishers(props) {
                     <FormRow>
                         <FormLabel htmlFor="name">{text.publisherName}</FormLabel>
                         <FormField>
-                            <input id="name" className="form-control" type="text" value={publisherName} onChange={onPublisherNameModify} />
+                            <input id="name" className="form-control" type="text" value={publisherName} onChange={e => dispatch(PUBLISHER_NAME_MODIFY(e.target.value))} />
                         </FormField>
                     </FormRow>
                 </Container>
@@ -73,33 +68,3 @@ function Publishers(props) {
         </div>
     );
 }
-
-function mapStateToProps(state) {
-    const {
-        loginresult,
-        publishers,
-        publisherModified,
-        publisherId,
-        publisherName,
-    } = state;
-    const text = state.displayTexts;
-    return {
-        text,
-        loginresult,
-        publishers,
-        publisherModified,
-        publisherId: emptyStringWhenFalsy(publisherId),
-        publisherName: emptyStringWhenFalsy(publisherName),
-    };
-}
-
-function mapDispatchToProps(dispatch) {
-    return {
-        onPublisherSelect: (e) => dispatch(SELECT_PUBLISHER(e.target.value)),
-        onPublisherAdd: () => dispatch(SAVE_PUBLISHER_BUTTON_CLICKED()),
-        onPublisherRemove: () => dispatch(REMOVE_PUBLISHER_BUTTON_CLICKED()),
-        onPublisherNameModify: (e) => dispatch(PUBLISHER_NAME_MODIFY(e.target.value)),
-    };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Publishers);

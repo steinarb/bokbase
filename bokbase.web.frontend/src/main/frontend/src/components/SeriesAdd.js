@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { emptyStringWhenFalsy } from './componentsCommon';
 import Container from './bootstrap/Container';
 import StyledLinkLeft from './bootstrap/StyledLinkLeft';
@@ -14,15 +14,11 @@ import {
 import Locale from './Locale';
 
 
-function SeriesAdd(props) {
-    const {
-        text,
-        seriesModified,
-        seriesName,
-        onSaveClicked,
-        onCancelClicked,
-        onSeriesNameModify,
-    } = props;
+export function SeriesAdd() {
+    const text = useSelector(state => state.displayTexts);
+    const seriesModified = useSelector(state => state.seriesModified);
+    const seriesName = useSelector(state => emptyStringWhenFalsy(state.seriesName));
+    const dispatch = useDispatch();
 
     return (
         <div>
@@ -35,9 +31,9 @@ function SeriesAdd(props) {
                 <div className="row">&nbsp;</div>
                 <div className="row text-center">
                     <div className="col-4">
-                        <button type="button" className="btn btn-primary" onClick={onSaveClicked} disabled={!seriesModified}>{text.saveSeries}</button>
+                        <button type="button" className="btn btn-primary" onClick={() => dispatch(SAVE_ADD_SERIES_BUTTON_CLICKED())} disabled={!seriesModified}>{text.saveSeries}</button>
                     </div>                    <div className="col-4">
-                        <button type="button" className="btn btn-primary" onClick={onCancelClicked}>{text.cancel}</button>
+                        <button type="button" className="btn btn-primary" onClick={() => dispatch(CANCEL_ADD_SERIES_BUTTON_CLICKED())}>{text.cancel}</button>
                     </div>
                 </div>
             </Container>
@@ -47,7 +43,7 @@ function SeriesAdd(props) {
                     <FormRow>
                         <FormLabel htmlFor="name">{text.seriesName}</FormLabel>
                         <FormField>
-                            <input id="name" className="form-control" type="text" value={seriesName} onChange={onSeriesNameModify} />
+                            <input id="name" className="form-control" type="text" value={seriesName} onChange={e => dispatch(SERIES_NAME_MODIFY(e.target.value))} />
                         </FormField>
                     </FormRow>
                 </Container>
@@ -55,28 +51,3 @@ function SeriesAdd(props) {
         </div>
     );
 }
-
-function mapStateToProps(state) {
-    const {
-        loginresult,
-        seriesModified,
-        seriesName,
-    } = state;
-    const text = state.displayTexts;
-    return {
-        text,
-        loginresult,
-        seriesModified,
-        seriesName: emptyStringWhenFalsy(seriesName),
-    };
-}
-
-function mapDispatchToProps(dispatch) {
-    return {
-        onSaveClicked: () => dispatch(SAVE_ADD_SERIES_BUTTON_CLICKED()),
-        onCancelClicked: () => dispatch(CANCEL_ADD_SERIES_BUTTON_CLICKED()),
-        onSeriesNameModify: (e) => dispatch(SERIES_NAME_MODIFY(e.target.value)),
-    };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(SeriesAdd);

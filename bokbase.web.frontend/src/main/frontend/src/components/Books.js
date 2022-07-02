@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import DatePicker from 'react-date-picker';
 import { emptyStringWhenFalsy } from './componentsCommon';
@@ -30,48 +30,30 @@ import {
 import Locale from './Locale';
 
 
-function Books(props) {
-    const {
-        text,
-        books,
-        authors,
-        series,
-        publishers,
-        bookModified,
-        bookId,
-        bookBookshelf,
-        bookAuthorId,
-        bookTitle,
-        bookSubtitle,
-        bookIsbn13,
-        bookSeriesId,
-        bookSeriesNumber,
-        bookPublisherId,
-        bookPublishedDate,
-        bookPages,
-        bookBinding,
-        bookFinishedReadDate,
-        bookRating,
-        bookAverageRating,
-        onBookSelect,
-        onBookAdd,
-        onBookRemove,
-        onBookBookshelfSelect,
-        onBookAuthorSelect,
-        onBookTitleModify,
-        onBookSubtitleModify,
-        onBookIsbn13Modify,
-        onBookSerieselect,
-        onBookSeriesNumberModify,
-        onBookPublisherSelect,
-        onBookPublishedDateModify,
-        onBookPagesModify,
-        onBookBindingModify,
-        onBookFinishedReadDateModify,
-        onBookRatingModify,
-        onBookAverageRatingModify,
-        locale,
-    } = props;
+export default function Books() {
+    const text = useSelector(state => state.displayTexts);
+    const books = useSelector(state => state.books);
+    const authors = useSelector(state => state.authors);
+    const series = useSelector(state => state.series);
+    const publishers = useSelector(state => state.publishers);
+    const bookModified = useSelector(state => state.bookModified);
+    const bookId = useSelector(state => emptyStringWhenFalsy(state.bookId));
+    const bookBookshelf = useSelector(state =>emptyStringWhenFalsy( state.bookBookshelf));
+    const bookAuthorId = useSelector(state => emptyStringWhenFalsy(state.bookAuthorId));
+    const bookTitle = useSelector(state => emptyStringWhenFalsy(state.bookTitle));
+    const bookSubtitle = useSelector(state => emptyStringWhenFalsy(state.bookSubtitle));
+    const bookIsbn13 = useSelector(state => emptyStringWhenFalsy(state.bookIsbn13));
+    const bookSeriesId = useSelector(state => emptyStringWhenFalsy(state.bookSeriesId));
+    const bookSeriesNumber = useSelector(state => emptyStringWhenFalsy(state.bookSeriesNumber));
+    const bookPublisherId = useSelector(state => emptyStringWhenFalsy(state.bookPublisherId));
+    const bookPublishedDate = useSelector(state => state.bookPublishedDate);
+    const bookPages = useSelector(state => emptyStringWhenFalsy(state.bookPages));
+    const bookBinding = useSelector(state => emptyStringWhenFalsy(state.bookBinding));
+    const bookFinishedReadDate = useSelector(state => state.bookFinishedReadDate);
+    const bookRating = useSelector(state => emptyStringWhenFalsy(state.bookRating));
+    const bookAverageRating = useSelector(state => emptyStringWhenFalsy(state.bookAverageRating));
+    const locale = useSelector(state => state.locale.replace('_', '-'));
+    const dispatch = useDispatch();
 
     return (
         <div>
@@ -84,10 +66,10 @@ function Books(props) {
                 <div className="row">&nbsp;</div>
                 <div className="row text-center">
                     <div className="col-4">
-                        <button type="button" disabled={!bookModified} className="btn btn-primary" onClick={onBookAdd}>{text.saveBook}</button>
+                        <button type="button" disabled={!bookModified} className="btn btn-primary" onClick={() => dispatch(SAVE_BOOK_BUTTON_CLICKED())}>{text.saveBook}</button>
                     </div>
                     <div className="col-4">
-                        <button type="button" className="btn btn-primary" onClick={onBookRemove}>{text.removeBook}</button>
+                        <button type="button" className="btn btn-primary" onClick={() => dispatch(REMOVE_BOOK_BUTTON_CLICKED())}>{text.removeBook}</button>
                     </div>
                     <div className="col-4">
                         <Link className="btn btn-primary" to="/books/add">{text.addBook}</Link>
@@ -100,7 +82,7 @@ function Books(props) {
                     <FormRow>
                         <FormLabel htmlFor="users">{text.selectBook}</FormLabel>
                         <FormField>
-                            <select id="users" className="form-control" value={bookId} onChange={onBookSelect}>
+                            <select id="users" className="form-control" value={bookId} onChange={e => dispatch(SELECT_BOOK(e.target.value))}>
                                 <option key="bookNull" value=""></option>
                                 {books.map((val) => <option key={'book' + val.bookId} value={val.bookId}>{val.title}</option>)}
                             </select>
@@ -109,7 +91,7 @@ function Books(props) {
                     <FormRow>
                         <FormLabel htmlFor="book_bookshelf">{text.bookshelf}</FormLabel>
                         <FormField>
-                            <select id="users" className="form-control" value={bookBookshelf} onChange={onBookBookshelfSelect}>
+                            <select id="users" className="form-control" value={bookBookshelf} onChange={e => dispatch(BOOK_BOOKSHELF_SELECT(e.target.value))}>
                                 <option key="bookshelfNull" value=""></option>
                                 <option key="to-read" value="toRead">{text.toRead}</option>
                                 <option key="currently-reading" value="currentlyReading">{text.currentlyReading}</option>
@@ -121,7 +103,7 @@ function Books(props) {
                     <FormRow>
                         <FormLabel htmlFor="authors">{text.author}</FormLabel>
                         <FormField>
-                            <select id="users" className="form-control" value={bookAuthorId} onChange={onBookAuthorSelect}>
+                            <select id="users" className="form-control" value={bookAuthorId} onChange={e => dispatch(BOOK_AUTHOR_SELECT(e.target.value))}>
                                 <option key="authorNull" value=""></option>
                                 {authors.map((val) => <option key={'author' + val.authorId} value={val.authorId}>{val.firstname + ' ' + val.lastname}</option>)}
                             </select>
@@ -130,25 +112,25 @@ function Books(props) {
                     <FormRow>
                         <FormLabel htmlFor="title">{text.title}</FormLabel>
                         <FormField>
-                            <input id="title" className="form-control" type="text" value={bookTitle} onChange={onBookTitleModify} />
+                            <input id="title" className="form-control" type="text" value={bookTitle} onChange={e => dispatch(BOOK_TITLE_MODIFY(e.target.value))} />
                         </FormField>
                     </FormRow>
                     <FormRow>
                         <FormLabel htmlFor="subtitle">{text.subtitle}</FormLabel>
                         <FormField>
-                            <input id="subtitle" className="form-control" type="text" value={bookSubtitle} onChange={onBookSubtitleModify} />
+                            <input id="subtitle" className="form-control" type="text" value={bookSubtitle} onChange={e => dispatch(BOOK_SUBTITLE_MODIFY(e.target.value))} />
                         </FormField>
                     </FormRow>
                     <FormRow>
                         <FormLabel htmlFor="isbn13">{text.isbn13}</FormLabel>
                         <FormField>
-                            <input id="isbn13" className="form-control" type="text" value={bookIsbn13} onChange={onBookIsbn13Modify} />
+                            <input id="isbn13" className="form-control" type="text" value={bookIsbn13} onChange={e => dispatch(BOOK_ISBN13_MODIFY(e.target.value))} />
                         </FormField>
                     </FormRow>
                     <FormRow>
                         <FormLabel htmlFor="series">{text.series}</FormLabel>
                         <FormField>
-                            <select id="users" className="form-control" value={bookSeriesId} onChange={onBookSerieselect}>
+                            <select id="users" className="form-control" value={bookSeriesId} onChange={e => dispatch(BOOK_SERIES_SELECT(e.target.value))}>
                                 <option key="seriesNull" value=""></option>
                                 {series.map((val) => <option key={'series' + val.seriesId} value={val.seriesId}>{val.name}</option>)}
                             </select>
@@ -157,13 +139,13 @@ function Books(props) {
                     <FormRow>
                         <FormLabel htmlFor="seriesNumber">{text.seriesNumber}</FormLabel>
                         <FormField>
-                            <input id="seriesNumber" className="form-control" type="text" value={bookSeriesNumber} onChange={onBookSeriesNumberModify} />
+                            <input id="seriesNumber" className="form-control" type="text" value={bookSeriesNumber} onChange={e => dispatch(BOOK_SERIES_NUMBER_MODIFY(e.target.value))} />
                         </FormField>
                     </FormRow>
                     <FormRow>
                         <FormLabel htmlFor="publishers">{text.publisher}</FormLabel>
                         <FormField>
-                            <select id="users" className="form-control" value={bookPublisherId} onChange={onBookPublisherSelect}>
+                            <select id="users" className="form-control" value={bookPublisherId} onChange={e => dispatch(BOOK_PUBLISHER_SELECT(e.target.value))}>
                                 <option key="publisherNull" value=""></option>
                                 {publishers.map((val) => <option key={'publisher' + val.publisherId} value={val.publisherId}>{val.name}</option>)}
                             </select>
@@ -172,19 +154,19 @@ function Books(props) {
                     <FormRow>
                         <FormLabel htmlFor="publishedDate">{text.publishedDate}</FormLabel>
                         <FormField>
-                            <DatePicker id="publishedDate" locale={locale} value={bookPublishedDate} onChange={onBookPublishedDateModify}/>
+                            <DatePicker id="publishedDate" locale={locale} value={bookPublishedDate} onChange={d => dispatch(BOOK_PUBLISHED_DATE_MODIFY(d))}/>
                         </FormField>
                     </FormRow>
                     <FormRow>
                         <FormLabel htmlFor="pages">{text.pages}</FormLabel>
                         <FormField>
-                            <input id="pages" className="form-control" type="text" value={bookPages} onChange={onBookPagesModify} />
+                            <input id="pages" className="form-control" type="text" value={bookPages} onChange={e => dispatch(BOOK_PAGES_MODIFY(e.target.value))} />
                         </FormField>
                     </FormRow>
                     <FormRow>
                         <FormLabel htmlFor="binding">{text.binding}</FormLabel>
                         <FormField>
-                            <select id="binding" className="form-control" value={bookBinding} onChange={onBookBindingModify}>
+                            <select id="binding" className="form-control" value={bookBinding} onChange={e => dispatch(BOOK_BINDING_MODIFY(e.target.value))}>
                                 <option key="bindingNull" value=""></option>
                                 <option key="Hardcover" value="Hardcover">{text.hardcover}</option>
                                 <option key="Paperback" value="Paperback">{text.paperback}</option>
@@ -194,19 +176,19 @@ function Books(props) {
                     <FormRow>
                         <FormLabel htmlFor="finishedReadDate">{text.finishedReadDate}</FormLabel>
                         <FormField>
-                            <DatePicker id="finishedReadDate" locale={locale} value={bookFinishedReadDate} onChange={onBookFinishedReadDateModify}/>
+                            <DatePicker id="finishedReadDate" locale={locale} value={bookFinishedReadDate} onChange={d => dispatch(BOOK_FINISHED_READ_DATE_MODIFY(d))}/>
                         </FormField>
                     </FormRow>
                     <FormRow>
                         <FormLabel htmlFor="rating">{text.rating}</FormLabel>
                         <FormField>
-                            <input id="rating" className="form-control" type="text" value={bookRating} onChange={onBookRatingModify} />
+                            <input id="rating" className="form-control" type="text" value={bookRating} onChange={e => dispatch(BOOK_RATING_MODIFY(e.target.value))} />
                         </FormField>
                     </FormRow>
                     <FormRow>
                         <FormLabel htmlFor="averageRating">{text.averageRating}</FormLabel>
                         <FormField>
-                            <input id="averageRating" className="form-control" type="text" value={bookAverageRating} onChange={onBookAverageRatingModify} />
+                            <input id="averageRating" className="form-control" type="text" value={bookAverageRating} onChange={e => dispatch(BOOK_AVERAGE_RATING_MODIFY(e.target.value))} />
                         </FormField>
                     </FormRow>
                 </Container>
@@ -214,80 +196,3 @@ function Books(props) {
         </div>
     );
 }
-
-function mapStateToProps(state) {
-    const {
-        loginresult,
-        books,
-        authors,
-        series,
-        publishers,
-        bookModified,
-        bookId,
-        bookBookshelf,
-        bookAuthorId,
-        bookTitle,
-        bookSubtitle,
-        bookIsbn13,
-        bookSeriesId,
-        bookSeriesNumber,
-        bookPublisherId,
-        bookPublishedDate,
-        bookPages,
-        bookBinding,
-        bookFinishedReadDate,
-        bookRating,
-        bookAverageRating,
-        locale,
-    } = state;
-    const text = state.displayTexts;
-    return {
-        text,
-        loginresult,
-        books,
-        authors,
-        series,
-        publishers,
-        bookModified,
-        bookId: emptyStringWhenFalsy(bookId),
-        bookBookshelf: emptyStringWhenFalsy(bookBookshelf),
-        bookAuthorId: emptyStringWhenFalsy(bookAuthorId),
-        bookTitle: emptyStringWhenFalsy(bookTitle),
-        bookSubtitle: emptyStringWhenFalsy(bookSubtitle),
-        bookIsbn13: emptyStringWhenFalsy(bookIsbn13),
-        bookSeriesId: emptyStringWhenFalsy(bookSeriesId),
-        bookSeriesNumber: emptyStringWhenFalsy(bookSeriesNumber),
-        bookPublisherId: emptyStringWhenFalsy(bookPublisherId),
-        bookPublishedDate,
-        bookPages: emptyStringWhenFalsy(bookPages),
-        bookBinding: emptyStringWhenFalsy(bookBinding),
-        bookFinishedReadDate,
-        bookRating: emptyStringWhenFalsy(bookRating),
-        bookAverageRating: emptyStringWhenFalsy(bookAverageRating),
-        locale: locale.replace('_', '-'),
-    };
-}
-
-function mapDispatchToProps(dispatch) {
-    return {
-        onBookSelect: (e) => dispatch(SELECT_BOOK(e.target.value)),
-        onBookAdd: () => dispatch(SAVE_BOOK_BUTTON_CLICKED()),
-        onBookRemove: () => dispatch(REMOVE_BOOK_BUTTON_CLICKED()),
-        onBookBookshelfSelect: (e) => dispatch(BOOK_BOOKSHELF_SELECT(e.target.value)),
-        onBookAuthorSelect: (e) => dispatch(BOOK_AUTHOR_SELECT(e.target.value)),
-        onBookTitleModify: (e) => dispatch(BOOK_TITLE_MODIFY(e.target.value)),
-        onBookSubtitleModify: (e) => dispatch(BOOK_SUBTITLE_MODIFY(e.target.value)),
-        onBookIsbn13Modify: (e) => dispatch(BOOK_ISBN13_MODIFY(e.target.value)),
-        onBookSerieselect: (e) => dispatch(BOOK_SERIES_SELECT(e.target.value)),
-        onBookSeriesNumberModify: (e) => dispatch(BOOK_SERIES_NUMBER_MODIFY(e.target.value)),
-        onBookPublisherSelect: (e) => dispatch(BOOK_PUBLISHER_SELECT(e.target.value)),
-        onBookPublishedDateModify:  (value) => dispatch(BOOK_PUBLISHED_DATE_MODIFY(value)),
-        onBookPagesModify: (e) => dispatch(BOOK_PAGES_MODIFY(e.target.value)),
-        onBookBindingModify: (e) => dispatch(BOOK_BINDING_MODIFY(e.target.value)),
-        onBookFinishedReadDateModify: (value) => dispatch(BOOK_FINISHED_READ_DATE_MODIFY(value)),
-        onBookRatingModify: (e) => dispatch(BOOK_RATING_MODIFY(e.target.value)),
-        onBookAverageRatingModify: (e) => dispatch(BOOK_AVERAGE_RATING_MODIFY(e.target.value)),
-    };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Books);

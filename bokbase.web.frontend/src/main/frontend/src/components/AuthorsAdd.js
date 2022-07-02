@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { emptyStringWhenFalsy } from './componentsCommon';
 import Container from './bootstrap/Container';
 import StyledLinkLeft from './bootstrap/StyledLinkLeft';
@@ -15,17 +15,12 @@ import {
 import Locale from './Locale';
 
 
-function AuthorsAdd(props) {
-    const {
-        text,
-        authorModified,
-        authorFirstname,
-        authorLastname,
-        onAddClicked,
-        onCancelClicked,
-        onAuthorFirstnameModify,
-        onAuthorLastnameModify,
-    } = props;
+export default function AuthorsAdd() {
+    const text = useSelector(state => state.displayTexts);
+    const authorModified = useSelector(state => state.authorModified);
+    const authorFirstname = useSelector(state => emptyStringWhenFalsy(state.authorFirstname));
+    const authorLastname = useSelector(state => emptyStringWhenFalsy(state.authorLastname));
+    const dispatch = useDispatch();
 
     return (
         <div>
@@ -38,10 +33,10 @@ function AuthorsAdd(props) {
                 <div className="row">&nbsp;</div>
                 <div className="row text-center">
                     <div className="col-4">
-                        <button type="button" className="btn btn-primary" onClick={onAddClicked} disabled={!authorModified}>{text.saveAuthor}</button>
+                        <button type="button" className="btn btn-primary" onClick={() => dispatch(SAVE_ADD_AUTHOR_BUTTON_CLICKED())} disabled={!authorModified}>{text.saveAuthor}</button>
                     </div>
                     <div className="col-4">
-                        <button type="button" className="btn btn-primary" onClick={onCancelClicked}>{text.cancel}</button>
+                        <button type="button" className="btn btn-primary" onClick={() => dispatch(CANCEL_ADD_AUTHOR_BUTTON_CLICKED())}>{text.cancel}</button>
                     </div>
                 </div>
             </Container>
@@ -51,13 +46,13 @@ function AuthorsAdd(props) {
                     <FormRow>
                         <FormLabel htmlFor="firstname">{text.firstname}</FormLabel>
                         <FormField>
-                            <input id="firstname" className="form-control" type="text" value={authorFirstname} onChange={onAuthorFirstnameModify} />
+                            <input id="firstname" className="form-control" type="text" value={authorFirstname} onChange={e => dispatch(AUTHOR_FIRSTNAME_MODIFY(e.target.value))} />
                         </FormField>
                     </FormRow>
                     <FormRow>
                         <FormLabel htmlFor="lastname">{text.lastname}</FormLabel>
                         <FormField>
-                            <input id="lastname" className="form-control" type="text" value={authorLastname} onChange={onAuthorLastnameModify} />
+                            <input id="lastname" className="form-control" type="text" value={authorLastname} onChange={e => dispatch(AUTHOR_LASTNAME_MODIFY(e.target.value))} />
                         </FormField>
                     </FormRow>
                 </Container>
@@ -65,31 +60,3 @@ function AuthorsAdd(props) {
         </div>
     );
 }
-
-function mapStateToProps(state) {
-    const {
-        loginresult,
-        authorModified,
-        authorFirstname,
-        authorLastname,
-    } = state;
-    const text = state.displayTexts;
-    return {
-        text,
-        loginresult,
-        authorModified,
-        authorFirstname: emptyStringWhenFalsy(authorFirstname),
-        authorLastname: emptyStringWhenFalsy(authorLastname),
-    };
-}
-
-function mapDispatchToProps(dispatch) {
-    return {
-        onAddClicked: () => dispatch(SAVE_ADD_AUTHOR_BUTTON_CLICKED()),
-        onCancelClicked: () => dispatch(CANCEL_ADD_AUTHOR_BUTTON_CLICKED()),
-        onAuthorFirstnameModify: (e) => dispatch(AUTHOR_FIRSTNAME_MODIFY(e.target.value)),
-        onAuthorLastnameModify: (e) => dispatch(AUTHOR_LASTNAME_MODIFY(e.target.value)),
-    };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(AuthorsAdd);

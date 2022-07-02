@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Redirect } from 'react-router';
-import {
-    LOGIN_REQUEST,
-} from '../reduxactions';
+import { LOGIN_REQUEST } from '../reduxactions';
 import LoginMessage from './LoginMessage';
 
-function Login(props) {
-    const { loginresult, text, onSendLogin } = props;
+export default function Login() {
+    const loginresult = useSelector(state => state.loginresult);
+    const text = useSelector(state => state.displayTexts);
+    const dispatch = useDispatch();
     const [ username, setUsername ] = useState('');
     const [ password, setPassword ] = useState('');
     if (loginresult.success) {
@@ -40,7 +40,7 @@ function Login(props) {
                     </div>
                     <div className="form-group row">
                         <div className="offset-xs-3 col-xs-9">
-                            <input className="btn btn-primary" type="submit" value="Login" onClick={() => onSendLogin(username, password)}/>
+                            <input className="btn btn-primary" type="submit" value="Login" onClick={() => dispatch(LOGIN_REQUEST({ username, password }))}/>
                         </div>
                     </div>
                 </form>
@@ -48,20 +48,3 @@ function Login(props) {
         </div>
     );
 }
-
-function mapStateToProps(state) {
-    const { loginresult } = state;
-    const text = state.displayTexts;
-    return {
-        loginresult,
-        text,
-    };
-}
-
-function mapDispatchToProps(dispatch) {
-    return {
-        onSendLogin: (username, password) => dispatch(LOGIN_REQUEST({ username, password })),
-    };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Login);

@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { emptyStringWhenFalsy } from './componentsCommon';
 import Container from './bootstrap/Container';
@@ -17,20 +17,14 @@ import {
 import Locale from './Locale';
 
 
-function Authors(props) {
-    const {
-        text,
-        authors,
-        authorModified,
-        authorId,
-        authorFirstname,
-        authorLastname,
-        onAuthorSelect,
-        onAuthorAdd,
-        onAuthorRemove,
-        onAuthorFirstnameModify,
-        onAuthorLastnameModify,
-    } = props;
+export default function Authors() {
+    const text = useSelector(state => state.displayTexts);
+    const authors = useSelector(state => state.authors);
+    const authorModified = useSelector(state => state.authorModified);
+    const authorId = useSelector(state => emptyStringWhenFalsy(state.authorId));
+    const authorFirstname = useSelector(state => emptyStringWhenFalsy(state.authorFirstname));
+    const authorLastname = useSelector(state => emptyStringWhenFalsy(state.authorLastname));
+    const dispatch = useDispatch();
 
     return (
         <div>
@@ -43,10 +37,10 @@ function Authors(props) {
                 <div className="row">&nbsp;</div>
                 <div className="row text-center">
                     <div className="col-4">
-                        <button type="button" disabled={!authorModified} className="btn btn-primary" onClick={onAuthorAdd}>{text.saveAuthor}</button>
+                        <button type="button" disabled={!authorModified} className="btn btn-primary" onClick={() => dispatch(SAVE_AUTHOR_BUTTON_CLICKED())}>{text.saveAuthor}</button>
                     </div>
                     <div className="col-4">
-                        <button type="button" className="btn btn-primary" onClick={onAuthorRemove}>{text.removeAuthor}</button>
+                        <button type="button" className="btn btn-primary" onClick={() => dispatch(REMOVE_AUTHOR_BUTTON_CLICKED())}>{text.removeAuthor}</button>
                     </div>
                     <div className="col-4">
                         <Link className="btn btn-primary" to="/authors/add">{text.addAuthor}</Link>
@@ -59,7 +53,7 @@ function Authors(props) {
                     <FormRow>
                         <FormLabel htmlFor="users">{text.selectAuthor}</FormLabel>
                         <FormField>
-                            <select id="users" className="form-control" value={authorId} onChange={onAuthorSelect}>
+                            <select id="users" className="form-control" value={authorId} onChange={e => dispatch(SELECT_AUTHOR(e.target.value))}>
                                 <option key="authorNull" value=""></option>
                                 {authors.map((val) => <option key={'author' + val.authorId} value={val.authorId}>{val.firstname + ' ' + val.lastname}</option>)}
                             </select>
@@ -68,13 +62,13 @@ function Authors(props) {
                     <FormRow>
                         <FormLabel htmlFor="firstname">{text.firstname}</FormLabel>
                         <FormField>
-                            <input id="firstname" className="form-control" type="text" value={authorFirstname} onChange={onAuthorFirstnameModify} />
+                            <input id="firstname" className="form-control" type="text" value={authorFirstname} onChange={e => dispatch(AUTHOR_FIRSTNAME_MODIFY(e.target.value))} />
                         </FormField>
                     </FormRow>
                     <FormRow>
                         <FormLabel htmlFor="lastname">{text.lastname}</FormLabel>
                         <FormField>
-                            <input id="lastname" className="form-control" type="text" value={authorLastname} onChange={onAuthorLastnameModify} />
+                            <input id="lastname" className="form-control" type="text" value={authorLastname} onChange={e => dispatch(AUTHOR_LASTNAME_MODIFY(e.target.value))} />
                         </FormField>
                     </FormRow>
                 </Container>
@@ -82,36 +76,3 @@ function Authors(props) {
         </div>
     );
 }
-
-function mapStateToProps(state) {
-    const {
-        loginresult,
-        authors,
-        authorModified,
-        authorId,
-        authorFirstname,
-        authorLastname,
-    } = state;
-    const text = state.displayTexts;
-    return {
-        text,
-        loginresult,
-        authors,
-        authorModified,
-        authorId: emptyStringWhenFalsy(authorId),
-        authorFirstname: emptyStringWhenFalsy(authorFirstname),
-        authorLastname: emptyStringWhenFalsy(authorLastname),
-    };
-}
-
-function mapDispatchToProps(dispatch) {
-    return {
-        onAuthorSelect: (e) => dispatch(SELECT_AUTHOR(e.target.value)),
-        onAuthorAdd: () => dispatch(SAVE_AUTHOR_BUTTON_CLICKED()),
-        onAuthorRemove: () => dispatch(REMOVE_AUTHOR_BUTTON_CLICKED()),
-        onAuthorFirstnameModify: (e) => dispatch(AUTHOR_FIRSTNAME_MODIFY(e.target.value)),
-        onAuthorLastnameModify: (e) => dispatch(AUTHOR_LASTNAME_MODIFY(e.target.value)),
-    };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Authors);
