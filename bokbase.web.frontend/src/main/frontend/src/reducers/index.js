@@ -1,7 +1,5 @@
 import { combineReducers } from 'redux';
 import { connectRouter } from 'connected-react-router';
-import username from './usernameReducer';
-import password from './passwordReducer';
 import loginresult from './loginresultReducer';
 import accounts from './accountsReducer';
 import locale from './localeReducer';
@@ -73,8 +71,6 @@ export default (history) => combineReducers({
     seriesId,
     seriesModified,
     seriesName,
-    username,
-    password,
     loginresult,
     accounts,
     locale,
