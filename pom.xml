@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xml:space="preserve" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-    <!-- Copyright 2021 Steinar Bang                                                     -->
+    <!-- Copyright 2021-2022 Steinar Bang                                                -->
     <!--                                                                                 -->
     <!-- Licensed under the Apache License, Version 2.0 (the "License");                 -->
     <!-- you may not use this file except in compliance with the License.                -->
@@ -17,7 +17,7 @@
     <parent>
         <groupId>no.priv.bang.pom</groupId>
         <artifactId>bang-app-pom</artifactId>
-        <version>1.0.17</version>
+        <version>1.1.5</version>
     </parent>
     <groupId>no.priv.bang.bokbase</groupId>
     <artifactId>bokbase</artifactId>
@@ -28,7 +28,7 @@
     <name>Bokbase</name>
 
     <properties>
-        <authservice.version>1.13.9</authservice.version>
+        <authservice.version>1.14.1</authservice.version>
         <snakeyaml.version>1.17</snakeyaml.version>
         <open-iconic.version>1.1.1</open-iconic.version>
         <sonar.cpd.exclusions>
