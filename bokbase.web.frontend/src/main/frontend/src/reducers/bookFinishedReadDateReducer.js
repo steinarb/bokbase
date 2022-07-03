@@ -6,12 +6,12 @@ import {
 } from '../reduxactions';
 import { transformJavaLocalDateToESDate } from './reducerCommon';
 
-const defaultValue=null;
+const initialValue = new Date().toISOString();
 
-const bookFinishedReadDateReducer = createReducer(defaultValue, {
+const bookFinishedReadDateReducer = createReducer(initialValue, {
     [SELECTED_BOOK]: (state, action) => transformJavaLocalDateToESDate(action.payload.finishedReadDate),
-    [BOOK_FINISHED_READ_DATE_MODIFY]: (state, action) => action.payload,
-    [CLEAR_BOOK_DATA]: () => defaultValue,
+    [BOOK_FINISHED_READ_DATE_MODIFY]: (state, action) => action.payload + 'T' + state.split('T')[1],
+    [CLEAR_BOOK_DATA]: () => new Date().toISOString(),
 });
 
 export default bookFinishedReadDateReducer;

@@ -1,6 +1,5 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import DatePicker from 'react-date-picker';
 import { emptyStringWhenFalsy } from './componentsCommon';
 import Container from './bootstrap/Container';
 import StyledLinkLeft from './bootstrap/StyledLinkLeft';
@@ -42,13 +41,12 @@ export default function BooksAdd() {
     const bookSeriesId = useSelector(state => emptyStringWhenFalsy(state.bookSeriesId));
     const bookSeriesNumber = useSelector(state => emptyStringWhenFalsy(state.bookSeriesNumber));
     const bookPublisherId = useSelector(state => emptyStringWhenFalsy(state.bookPublisherId));
-    const bookPublishedDate = useSelector(state => state.bookPublishedDate);
+    const bookPublishedDate = useSelector(state => state.bookPublishedDate.split('T')[0]);
     const bookPages = useSelector(state => emptyStringWhenFalsy(state.bookPages));
     const bookBinding = useSelector(state => emptyStringWhenFalsy(state.bookBinding));
-    const bookFinishedReadDate = useSelector(state => state.bookFinishedReadDate);
+    const bookFinishedReadDate = useSelector(state => state.bookFinishedReadDate.split('T')[0]);
     const bookRating = useSelector(state => emptyStringWhenFalsy(state.bookRating));
     const bookAverageRating = useSelector(state => emptyStringWhenFalsy(state.bookAverageRating));
-    const locale = useSelector(state => state.locale.replace('_', '-'));
     const dispatch = useDispatch();
 
     return (
@@ -138,7 +136,7 @@ export default function BooksAdd() {
                     <FormRow>
                         <FormLabel htmlFor="publishedDate">{text.publishedDate}</FormLabel>
                         <FormField>
-                            <DatePicker id="publishedDate" locale={locale} value={bookPublishedDate} onChange={d => dispatch(BOOK_PUBLISHED_DATE_MODIFY(d))}/>
+                            <input type="date" id="publishedDate" value={bookPublishedDate} onChange={e => dispatch(BOOK_PUBLISHED_DATE_MODIFY(e.target.value))}/>
                         </FormField>
                     </FormRow>
                     <FormRow>
@@ -160,7 +158,7 @@ export default function BooksAdd() {
                     <FormRow>
                         <FormLabel htmlFor="finishedReadDate">{text.finishedReadDate}</FormLabel>
                         <FormField>
-                            <DatePicker id="finishedReadDate" locale={locale} value={bookFinishedReadDate} onChange={d => dispatch(BOOK_FINISHED_READ_DATE_MODIFY(d))}/>
+                            <input type="date" id="finishedReadDate" value={bookFinishedReadDate} onChange={e => dispatch(BOOK_FINISHED_READ_DATE_MODIFY(e.target.value))}/>
                         </FormField>
                     </FormRow>
                     <FormRow>

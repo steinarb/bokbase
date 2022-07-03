@@ -33,10 +33,10 @@ function payloadEndsWithDecimalCommaAndHasOnlyOneDecimalComma(payload) {
 export function transformJavaLocalDateToESDate(localDate) {
     if (localDate) {
         var [year, month, day] = localDate;
-        return new Date(year, month - 1, day);
+        return new Date(year, month - 1, day).toISOString();
     }
 
-    return null;
+    return new Date().toISOString();
 }
 
 export function formatLocalDate(localDate) {
