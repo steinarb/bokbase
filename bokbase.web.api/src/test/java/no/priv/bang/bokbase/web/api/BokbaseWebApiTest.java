@@ -290,6 +290,7 @@ class BokbaseWebApiTest extends ShiroTestBase {
         when(bokbase.addBook(anyString(), any())).thenReturn(BooksWithAddedBookId.with().addedBookId(newBookId).books(books).build());
         MockLogService logservice = new MockLogService();
         UserManagementService useradmin = mock(UserManagementService.class);
+        loginUser("jd", "johnnyBoi");
 
         BokbaseWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(bokbase , useradmin, logservice);
 

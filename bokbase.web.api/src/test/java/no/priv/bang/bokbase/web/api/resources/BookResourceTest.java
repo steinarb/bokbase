@@ -27,8 +27,9 @@ import org.junit.jupiter.api.Test;
 import no.priv.bang.bokbase.services.BokbaseService;
 import no.priv.bang.bokbase.services.beans.Book;
 import no.priv.bang.bokbase.services.beans.BooksWithAddedBookId;
+import no.priv.bang.bokbase.web.api.ShiroTestBase;
 
-class BookResourceTest {
+class BookResourceTest extends ShiroTestBase {
 
     @Test
     void testAddBook() {
@@ -39,6 +40,7 @@ class BookResourceTest {
         BokbaseService bokbase = mock(BokbaseService.class);
         when(bokbase.addBook(anyString(), any())).thenReturn(BooksWithAddedBookId.with().addedBookId(newBookId).books(books).build());
         resource.bokbase = bokbase;
+        loginUser("jd", "johnnyBoi");
 
         BooksWithAddedBookId booksWithAddedBookId = resource.addBook(newBook);
         assertThat(booksWithAddedBookId.getBooks()).contains(newBook);
